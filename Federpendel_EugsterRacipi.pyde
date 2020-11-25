@@ -1,41 +1,44 @@
 import math
 
 t = 0
-A = 0.5
+A = 1
 # Range of y-values
 xmin = -900/25 #halbe Bildschirmbreite : x-Streckung = Skala t = 1 s
 xmax = 900/25
 
 # Range of y-values
-ymin = -700/100 #halbe Bildschirmhöhe : y-Streckung = Skala x = 1 m
-ymax = 700/100
+ymin = -700/200*10 #halbe Bildschirmhöhe : y-Streckung = Skala x = 10 cm
+ymax = 700/200*10
 
 # Calculate the range
 rangex = xmax - xmin
 rangey = ymax - ymin
 
 def setup():
+    background(255)
     global xscl, yscl
     size(1800, 1400)
     frameRate(25)
     this.surface.setTitle("Sinus und Cosinus")
     xscl = width/rangex
     yscl = -height/rangey
-
+    
+    
 def draw():
-    background(255)
+    #background(255)
     translate(width/2, height/2)
     grid(xscl, yscl)
     global t
-    global A
+    global A #Amplitude
     
     xbeg = 0 #xpos zu Beginn
     ybeg = 0 #ypos zu Beginn
     
       
-    strokeWeight(10)
-    point(xbeg+25*t, ybeg-A*cos(t)*100) #25 = Streckung x-Achse, 100 = Streckung y-Achse
+    strokeWeight(5)
+    point(xbeg+25*t, ybeg-A*cos(t)*200) #25 = Streckung x-Achse, 100 = Streckung y-Achse
     t = t + 0.04 #0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
+    
     
 
 """
@@ -48,7 +51,7 @@ def graphFunction():
         line(x*xscl, math.cos(x)*yscl, (x + 0.1)*xscl, math.cos(x + 0.1)*yscl)
         x += 0.1
 """
-        
+#fremder code aber kei ahnig meh vo wo. und apasst uf üsi bedürfnis        
 def grid(xscl, yscl):
     strokeWeight(1)
     stroke(220, 220, 220)   
