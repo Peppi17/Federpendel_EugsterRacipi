@@ -12,5 +12,5 @@ def draw():
       
     strokeWeight(10)
     point(10*t, 200+cos(t)*50)
-    t = t + 0.2
+    t = t + 0.1
        
