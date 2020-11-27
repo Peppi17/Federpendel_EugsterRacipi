@@ -1,33 +1,34 @@
-import math
 
-t = 0
-A = 1
-# Range of y-values
-xmin = -900/25 #halbe Bildschirmbreite : x-Streckung = Skala t = 1 s
-xmax = 900/25
+t = 0 #Zeit
+A = 1 #Amplitude
 
-# Range of y-values
-ymin = -700/200*10 #halbe Bildschirmhöhe : y-Streckung = Skala x = 10 cm
-ymax = 700/200*10
+# Bereich X-Werte
+xmin = 0 
+xmax = 900 #halbe Bildschirmbreite : x-Streckung = Skala (t = 1 s)
 
-# Calculate the range
+# Bereich Y-Werte
+ymin = -700
+ymax = 700 #halbe Bildschirmhöhe : y-Streckung = Skala (x = 10 cm)
+
+# Bereich Graph
 rangex = xmax - xmin
 rangey = ymax - ymin
 
 def setup():
     background(255)
-    global xscl, yscl
     size(1800, 1400)
-    frameRate(25)
-    this.surface.setTitle("Sinus und Cosinus")
-    xscl = width/rangex
-    yscl = -height/rangey
+    frameRate(25) #Bilder pro Sekunde
+    
+    global xscl, yscl
+    xscl = 25
+    yscl = 20
     
     
 def draw():
     #background(255)
     translate(width/2, height/2)
-    grid(xscl, yscl)
+    
+    graph(xscl, yscl)
     global t
     global A #Amplitude
     
@@ -36,9 +37,28 @@ def draw():
     
       
     strokeWeight(5)
+    stroke(0)
     point(xbeg+25*t, ybeg-A*cos(t)*200) #25 = Streckung x-Achse, 100 = Streckung y-Achse
     t = t + 0.04 #0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
+ 
+#Kariertes Raster
+def graph(xscl, yscl):
     
+    for i in range(0, rangex/xscl): #Senkrechte Linien
+        strokeWeight(1)
+        stroke(220, 220, 220)
+        line(i*xscl, ymax, i*xscl, ymin)
+
+    for i in range(0, rangey/yscl): #Waagrechte Linien
+        strokeWeight(1)
+        stroke(220)
+        line(xmin, i*yscl, xmax, i*yscl) #Zwei Linien gespiegelt an der X-Achse
+        line(xmin, -i*yscl, xmax, -i*yscl)
+    
+    strokeWeight(2)
+    stroke(0)
+    line(xmin, 0, xmax, 0) #X-Achse
+    line(xmin, ymin, xmin, ymax) #Y-Achse
     
 
 """
@@ -52,14 +72,3 @@ def graphFunction():
         x += 0.1
 """
 #fremder code aber kei ahnig meh vo wo. und apasst uf üsi bedürfnis        
-def grid(xscl, yscl):
-    strokeWeight(1)
-    stroke(220, 220, 220)   
-    for i in range(0, xmax):
-        line(i*xscl, ymin*yscl, i*xscl, ymax*yscl)
-    for i in range(ymin, ymax + 1):
-        line(0, i*yscl, xmax*xscl, i*yscl)
-    strokeWeight(2)
-    stroke(0)
-    line(0, ymin*yscl, 0, ymax*yscl)
-    line(xmin*xscl, 0, xmax*xscl, 0)
