@@ -1,4 +1,5 @@
 #Kariertes Raster
+
 def grid(xscl, yscl):
     
     for i in range(0, rangex/xscl): #Senkrechte Linien
