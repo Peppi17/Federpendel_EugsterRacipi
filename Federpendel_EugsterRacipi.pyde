@@ -28,7 +28,7 @@ def draw():
     #background(255)
     translate(width/2, height/2)
     
-    graph(xscl, yscl)
+    grid(xscl, yscl)
     global t
     global A #Amplitude
     
@@ -41,24 +41,7 @@ def draw():
     point(xbeg+25*t, ybeg-A*cos(t)*200) #25 = Streckung x-Achse, 100 = Streckung y-Achse
     t = t + 0.04 #0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
  
-#Kariertes Raster
-def graph(xscl, yscl):
-    
-    for i in range(0, rangex/xscl): #Senkrechte Linien
-        strokeWeight(1)
-        stroke(220, 220, 220)
-        line(i*xscl, ymax, i*xscl, ymin)
 
-    for i in range(0, rangey/yscl): #Waagrechte Linien
-        strokeWeight(1)
-        stroke(220)
-        line(xmin, i*yscl, xmax, i*yscl) #Zwei Linien gespiegelt an der X-Achse
-        line(xmin, -i*yscl, xmax, -i*yscl)
-    
-    strokeWeight(2)
-    stroke(0)
-    line(xmin, 0, xmax, 0) #X-Achse
-    line(xmin, ymin, xmin, ymax) #Y-Achse
     
 
 """
