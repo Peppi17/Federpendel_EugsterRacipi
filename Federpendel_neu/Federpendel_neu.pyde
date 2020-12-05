@@ -1,24 +1,44 @@
 
 # Variablen
 t = 0 # Zeit
+t_kurve_x = 0 # Zeit für Kurve, wird zurückgesetzt, wenn Punkt rechten Rand berührt.
+zaehler = 0 # Zähler, jedes mal wenn der Graph den rechten Rand berührt, wirds um "rand" erhöht
+rand = 23.5 # Zeitpunkt, wenn die Kurve wieder von Anfang an gehen soll.
 A = 1 # Amplitude
+l = 0
 
-prg_lauft = 0 # 1 = Programm läuft / 0 = Programm läuft nicht
-start = 0
-stop = 0
-linie_button1 = 0
-linie_button2 = 0
+prg_lauft = 2 # 1 = Programm läuft / 0 = Programm läuft nicht / 2 = Anfang des Programms
+start = 0 # Liniendicke Start-Knopf
+stop = 0 # Liniendicke Stop-Knopf
+linie_button1 = 0 # R- und G-Wert des Start-Knopfs 
+linie_button2 = 0 # R- und G-Wert des Stop-Knopfs 
+
+xscl = 25 
+yscl = 20
+    
+# Bereich X-Werte
+xmin = 0 
+xmax = 600 # halbe Bildschirmbreite : x-Streckung = Skala (t = 1 s)
+
+# Bereich Y-Werte
+ymin = -600/2
+ymax = 600/2 # halbe Bildschirmhöhe : y-Streckung = Skala (x = 10 cm)
+    
+# Bereich Graph
+rangex = xmax - xmin
+rangey = ymax - ymin
 
 def setup():
     background(255)
     size(1200,600) # Bildschirmgrösse
     frameRate(25) # Bilder pro Sekunde
-    grid()
-    
     
 def draw():
+    global prg_lauft, t, t_kurve_x, t_kurve_y, start, stop, linie_button1, linie_button2, xmax, xmin, ymax, ymin, xscl, yscl, rangex, rangey
+    
     translate(width/2, height/2)
-    global prg_lauft, t, start, stop, linie_button1, linie_button2
+    grid()
+    zeit()
     
     if  mouseButton == LEFT and 10 <= mouseX <= 90 and 10 <= mouseY <= 40 :
         prg_lauft = 1
@@ -34,10 +54,20 @@ def draw():
         linie_button1 = 0
         linie_button2 = 255
     
+    if prg_lauft == 0:
+        cosinuskurve()
+        federpendel()
+        
     if prg_lauft == 1 :
         cosinuskurve()
         federpendel()
         t = t + 0.04 # 0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
+        t_kurve_x = t_kurve_x + 0.04
+
+    
+    if prg_lauft == 2: # Anfangsphase, noch kein Punkt auf Graph
+        federpendel()
+
     
     # Start-Button
     strokeWeight(start)
@@ -45,8 +75,9 @@ def draw():
     fill(0,153,0)
     rect(-590,-290, 80, 30)
     fill(255)
-    text("Start",-575,-270)
     textSize(20)
+    text("Start",-575,-270)
+
     
     # Stop-Button
     strokeWeight(stop)
@@ -54,28 +85,14 @@ def draw():
     fill(153,0,0)
     rect(-500,-290, 80, 30)
     fill(255)
-    text("Stop",-485,-270)
     textSize(20)
+    text("Stop",-485,-270)
+    
     
 # Kariertes Raster
 def grid():
-    xscl = 25 
-    yscl = 20
-    
-    # Bereich X-Werte
-    xmin = 0 
-    xmax = width # halbe Bildschirmbreite : x-Streckung = Skala (t = 1 s)
+    background(255)
 
-    # Bereich Y-Werte
-    ymin = -height/2
-    ymax = height/2 # halbe Bildschirmhöhe : y-Streckung = Skala (x = 10 cm)
-    
-    # Bereich Graph
-    rangex = xmax - xmin
-    rangey = ymax - ymin
-    
-    translate(width/2, height/2)
-    
     for i in range(0, rangex/xscl): # Senkrechte Linien
         strokeWeight(1)
         stroke(220)
@@ -94,33 +111,49 @@ def grid():
     fill(0)
     triangle(600,0,600-5,5,600-5,-5) # Spitze X-Achse
     triangle(0,-300,-5,-295,5,-295) # Spitze  Y-Achse
+    textSize(10)
     text("Zeit t",540,15) # Text "Zeit t" zur X-Achse
     text("Amplitude A",5,-280) # Text "Amplitude A" zur Y-Achse
-    textSize(10)
-
-def cosinuskurve(): # Cosinuskurve zeichnen
-    global A
-    strokeWeight(5)
+    
+# Cosinuskurve zeichnen
+def cosinuskurve(): 
+    global A, l, t_kurve_x, zaehler, rand
+    if t_kurve_x >= rand :
+        t_kurve_x = 0
+        zaehler = zaehler + rand
+        
+    
+    strokeWeight(10)
+    stroke(255, 100, 0)        # neuester Punkt auf dem Graph
+    point(25*t_kurve_x, -A*cos(t)*200) # 25 = Streckung x-Achse, 100 = Streckung y-Achse
+    
+    strokeWeight(3)
     stroke(0)
-    point(25*t, -A*cos(t)*200) # 25 = Streckung x-Achse, 100 = Streckung y-Achse
+    punkt_max = int(t_kurve_x/0.04)
+    for l in range(0, punkt_max) :
+        point(25*l*0.04, -A*cos(zaehler+l*0.04)*200) # Alle anderen Punkte davor
+
+    
     
 
-def federpendel(): # Gewicht des Federpendels zeichnen
+# Zeitangabe oben rechts
+def zeit():
+    fill(0)
+    textSize(10)
+    text(t, 480, -285)
+    text("Sekunden", 520, -285)
+
+    
+# Gewicht des Federpendels zeichnen
+def federpendel(): 
     noStroke()
     fill(200)
-    rect(-330,-300,60,30)
-    
-    strokeWeight(2)
-    stroke(255)
-    line(-300,-270,-300,-A*cos(t-0.04)*200)
-    strokeWeight(30)
-    stroke(255, 255, 255)
-    point(-300, -A*cos(t-0.04)*200) # vorherigen Ball löschen (weiss machen)
+    rect(-330,-300,60,30) # Linie("Feder") und Balken oben, an dem der Ball angemacht ist
     
     strokeWeight(2)
     stroke(0)
     line(-300,-270,-300,-A*cos(t)*200)
-    strokeWeight(20)
+    strokeWeight(25)
     stroke(255, 100, 0)
-    point(-300, -A*cos(t)*200) # Kreieren des neuen Balls
+    point(-300, -A*cos(t)*200) # Kreieren der neuen Zeichnung (Ball und Linie)
     
