@@ -43,7 +43,7 @@ def setup():
     frameRate(25) # Bilder pro Sekunde
     
 def draw():
-    global prg_lauft, t, t_kurve_x, t_kurve_y, start, stop, reset, linie_button1, linie_button2, linie_button3, xmax, xmin, ymax, ymin, xscl, yscl, rangex, rangey
+    global prg_lauft, t, start, stop, reset, linie_button1, linie_button2, linie_button3, xmax, xmin, ymax, ymin, xscl, yscl, rangex, rangey
     
     translate(width/2, height/2) # Verschieben des Ursprungs von oben links zur Mitte
     grid() # Zeichnen des Rasters
@@ -87,13 +87,11 @@ def draw():
         cosinuskurve()
         federpendel()
         t = t + 0.04 # 0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
-        t_kurve_x = t_kurve_x + 0.04
         # Zeichnet immer wieder Stand der Federpendel und der Cosinuskurve und erhöht die Zeit um 0.04
-    
+        # 0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
+        
     if prg_lauft == 2: # Reset, wenn Programm neugestartet wird
         t = 0 # Zurücksetzen der relevanten Variablen
-        t_kurve_x = 0 
-        zaehler = 0 
 
         federpendel() # zeichnet Anfangsposition des Federpendels
 
