@@ -1,24 +1,28 @@
 
-# Variablen für Cosinuskurve zeichnen
+# allgemeine Variablen und Variablen für das Zeichnen der Cosinuskurve
 t = 0 # Zeit
-t_kurve_x = 0 # Zeit für Kurve, wird zurückgesetzt, wenn Punkt rechten Rand berührt.
+t_kurve_x = 0 # Variable für x-Koord. der Kurve, wird zurückgesetzt, wenn Punkt rechten Rand berührt.
 zaehler = 0 # Zähler, jedes mal wenn der Graph den rechten Rand berührt, wirds um "rand" erhöht
-rand = 24 # Zeitpunkt, wenn die Kurve wieder von Anfang an gehen soll.
-
-A = 1 # Amplitude
-
+rand = 10 # Zeitpunkt, wenn die Kurve wieder von Anfang an gehen soll.
 
 prg_lauft = 3 # 0 = Programm läuft nicht / 1 = Programm läuft /
               # 2 = Programm neugestartet / 3 = Anfang des Programms
 
+# Variablen für physikalische Formeln
+A = 1 # Amplitude
+k = TWO_PI # Federstärke
+m = 1 # Masse
+
+
+# Variablen für Knöpfe
 start = 0 # Konturdicke Start-Knopf
 stop = 0 # Konturdicke Stop-Knopf
 reset = 0 # Konturdicke Reset-Knopf
 linie_button1 = 0 # R- und G-Wert des Start-Knopfs 
 linie_button2 = 0 # R- und G-Wert des Stop-Knopfs
-linie_button3 = 0 # R- und G-Wert des SReset-Knopfs 
+linie_button3 = 0 # R- und G-Wert des Reset-Knopfs 
 
-
+# Variablen für das Raster des Graphen
 xscl = 25 # 1 Schritt entspricht 1 Sekunde, wegen frameRate 25
 yscl = 20
     
@@ -35,7 +39,6 @@ rangex = xmax - xmin
 rangey = ymax - ymin
 
 def setup():
-    background(255) # weisser Hintergrund
     size(1200,600) # Bildschirmgrösse
     frameRate(25) # Bilder pro Sekunde
     
@@ -91,7 +94,7 @@ def draw():
         t = 0 # Zurücksetzen der relevanten Variablen
         t_kurve_x = 0 
         zaehler = 0 
-        A = 1 
+
         federpendel() # zeichnet Anfangsposition des Federpendels
 
     if prg_lauft == 3: # Anfangsphase, noch kein Punkt auf Graph
@@ -129,7 +132,8 @@ def draw():
     
 # Kariertes Raster
 def grid():
-    background(255)
+    global xscl, yscl, xmax, xmin, ymax, ymin, rangex, rangey
+    background(255) # weisser Hintergrund
 
     for i in range(0, rangex/xscl): # Senkrechte Linien
         strokeWeight(1)
@@ -155,7 +159,9 @@ def grid():
     
 # Cosinuskurve zeichnen
 def cosinuskurve(): 
-    global A, t_kurve_x, zaehler, rand
+    global A, k, m, t, t_kurve_x, zaehler, rand
+    
+    omega = sqrt(k/m)
     
     # Kontrolle, ob Kurve den rechten Rand berührt hat
     if t_kurve_x >= rand :
@@ -165,14 +171,14 @@ def cosinuskurve():
     # neuester Punkt auf dem Graph
     strokeWeight(10)
     stroke(255, 100, 0)        
-    point(25*t_kurve_x, -A*cos(t)*200) # 25 = Streckung x-Achse, 100 = Streckung y-Achse
+    point(25*t_kurve_x, -A*cos(omega * t)*200) # 25 = Streckung x-Achse, 100 = Streckung y-Achse
     
     # Alle anderen Punkte davor zeichnen
     strokeWeight(3)
-    stroke(0)
+    stroke(100)
     punkt_max = int(t_kurve_x/0.04) # Vorbereitung für for-Schleife: keine floats
     for l in range(0, punkt_max) :
-        point(25*l*0.04, -A*cos(zaehler+l*0.04)*200) 
+        point(l, -A*cos(omega*(zaehler + (l*0.04)))*200) 
 
 
 # Zeitangabe oben rechts
@@ -185,14 +191,16 @@ def zeit():
     
 # Gewicht des Federpendels zeichnen
 def federpendel(): 
+    omega = sqrt(k/m)
+    
     noStroke()
     fill(200)
     rect(-330,-300,60,30) # Linie("Feder") und Balken oben, an dem der Ball angemacht ist
     
     strokeWeight(2)
     stroke(0)
-    line(-300,-270,-300,-A*cos(t)*200)
+    line(-300,-270,-300,-A*cos(omega*t)*200)
     strokeWeight(25)
     stroke(255, 100, 0)
-    point(-300, -A*cos(t)*200) # Kreieren der neuen Zeichnung (Ball und Linie)
+    point(-300, -A*cos(omega*t)*200) # Kreieren der neuen Zeichnung (Ball und Linie)
     
