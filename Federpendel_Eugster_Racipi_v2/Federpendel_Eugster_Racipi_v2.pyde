@@ -162,21 +162,23 @@ def cosinuskurve():
     
     omega = sqrt(k/m)
     
+    # Vorderster Punkt
     strokeWeight(10)
     stroke(255, 100, 0)
-    if t <= rand:
+    if t <= rand: # bis zum Rand
         point(25*t, -A*cos(omega * t)*200) # 25 = Streckung x-Achse, 200 = Streckung y-Achse
-    else:
+    else: # auf dem Rand
         point(25*rand, -A*cos(omega * t)*200)
     
+    # kleine Punkte der Kurve
     strokeWeight(3)
     stroke(100)
     l = 0
-    if t <= rand:
+    if t <= rand: # bis zum Rand
         while l <= t :
             point(25*l, -A*cos(omega * l )*200)
             l = l + 0.04
-    else:
+    else: # Punktebewegung vor dem Rand
         for r in range(0, 25*rand) :
             point(25*rand - r, -A*cos(omega*(r*0.04-t))*200)
     
