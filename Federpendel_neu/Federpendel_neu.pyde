@@ -3,7 +3,7 @@
 t = 0 # Zeit
 t_kurve_x = 0 # Variable für x-Koord. der Kurve, wird zurückgesetzt, wenn Punkt rechten Rand berührt.
 zaehler = 0 # Zähler, jedes mal wenn der Graph den rechten Rand berührt, wirds um "rand" erhöht
-rand = 10 # Zeitpunkt, wenn die Kurve wieder von Anfang an gehen soll.
+rand = 24 # Zeitpunkt, wenn die Kurve wieder von Anfang an gehen soll.
 
 prg_lauft = 3 # 0 = Programm läuft nicht / 1 = Programm läuft /
               # 2 = Programm neugestartet / 3 = Anfang des Programms
@@ -171,22 +171,29 @@ def cosinuskurve():
     # neuester Punkt auf dem Graph
     strokeWeight(10)
     stroke(255, 100, 0)        
-    point(25*t_kurve_x, -A*cos(omega * t)*200) # 25 = Streckung x-Achse, 100 = Streckung y-Achse
+    point(25*t_kurve_x, -A*cos(omega * t)*200) # 25 = Streckung x-Achse, 200 = Streckung y-Achse
     
     # Alle anderen Punkte davor zeichnen
     strokeWeight(3)
     stroke(100)
-    punkt_max = int(t_kurve_x/0.04) # Vorbereitung für for-Schleife: keine floats
-    for l in range(0, punkt_max) :
-        point(l, -A*cos(omega*(zaehler + (l*0.04)))*200) 
+    #punkt_max = int(t_kurve_x/0.04) # Vorbereitung für for-Schleife: keine floats
+    
+    l = 0
+    while l <= t_kurve_x :
+        point(25*l, -A*cos(omega*(zaehler + l) )*200)
+        l = l + 0.04
+    
+    #for l in range(0, punkt_max) :
+        #point(l, -A*cos(omega*(zaehler + (l*0.04)))*200)
 
+    
 
 # Zeitangabe oben rechts
 def zeit():
     fill(0)
     textSize(10)
     text(t, 480, -285)
-    text("Sekunden", 540, -285)
+    text("Sekunden", 530, -285)
 
     
 # Gewicht des Federpendels zeichnen
