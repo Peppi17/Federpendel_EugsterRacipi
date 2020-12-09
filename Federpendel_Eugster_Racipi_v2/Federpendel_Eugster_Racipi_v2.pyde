@@ -1,13 +1,17 @@
 
-movingMode1 = False
-pointerPos1 = 0
-pointerValA = 1.0
-pointerPos2 = 0
+movingMode = False
+pointerPos = 0
+pointerVal = 1.0
+
+'''                    für mehrere schieberegler
 movingMode2 = False
+pointerPos2 = 0
 pointerValk = 1.0
+movingMode3 = False
 pointerPos3 = 0
 pointerValm = 1.0
 
+'''
 # allgemeine Variablen und Variablen für das Zeichnen der Cosinuskurve
 t = 0 # Zeit
 streckung = 100 #100 = Streckung y-Achse
@@ -100,14 +104,14 @@ def draw():
     zeit(zeit_x, zeit_y) # Zeitangabe oben rechts
     
     # Schieberegler für Amplitude
-    draw_ruler(schiebe1_x, schiebe1_y, schiebe_laenge, pointerPos1, pointerValA, movingMode1)
-    draw_ruler(schiebe2_x, schiebe2_y, schiebe_laenge, pointerPos2, pointerValk, movingMode2)
-    A = 1 + pointerValA*0.01
+    draw_ruler(schiebe1_x, schiebe1_y, schiebe_laenge)
+    '''draw_ruler(schiebe2_x, schiebe2_y, schiebe_laenge)'''
+    A = 1 + pointerVal*0.01
     fill(0)
     textAlign(LEFT)
     textSize(10)
     text("Amplitude: " + str(A*10) + " cm", schiebe1_x, schiebe1_y - 10)
-    text("Federstärke: " + str(pointerValk) + " EINHEIT", schiebe2_x, schiebe2_y - 10)
+    '''text("Federstärke: " + str(pointerValk) + " EINHEIT", schiebe2_x, schiebe2_y - 10)'''
     
     omega = sqrt(k/m)
     
@@ -272,7 +276,11 @@ def federpendel(A, omega, streckung, objX, objY, obj_laenge, obj_breite):
 # objX:      X-Position des Reglers
 # objY:      Y-Position des Reglers
 # objLength: Länge des Reglers
-def draw_ruler(objX_vorher, objY_vorher, objLength, pointerPos, PointerVal, movingMode):
+'''def draw_ruler(objX_vorher, objY_vorher, objLength, pointerPos, PointerVal, movingMode):'''
+def draw_ruler(objX_vorher, objY_vorher, objLength):    
+    global movingMode
+    global pointerPos
+    global pointerVal
     
     objX =  objX_vorher + width/2 # Anpassung wegen Translation
     objY =  objY_vorher + height/2 # Anpassung wegen Translation
@@ -319,4 +327,5 @@ def draw_ruler(objX_vorher, objY_vorher, objLength, pointerPos, PointerVal, movi
     # Eingestellter Wert anhand der Schieberposition ermitteln
     pointerVal = int(200 / float(objLength) * (pointerPos - objX - objLength/2 )) # angepasst wegen Mitte
     
-    return movingMode, pointerPos, PointerVal
+    
+    '''return pointerPos, pointerVal, movingMode'''
