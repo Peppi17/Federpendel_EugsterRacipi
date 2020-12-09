@@ -1,6 +1,11 @@
 
+movingMode = False
+pointerPos = 0
+pointerVal = 1.0
+
 # allgemeine Variablen und Variablen für das Zeichnen der Cosinuskurve
 t = 0 # Zeit
+streckung = 100 #100 = Streckung y-Achse
 
 rand = 19 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen soll.
 
@@ -49,6 +54,15 @@ def draw():
     grid() # Zeichnen des Rasters
     zeit() # Zeitangabe oben rechts
     
+    # Schieberegler für Amplitude
+    draw_ruler(-550, 200, 150)
+    A = 1 + pointerVal*0.01
+    fill(0)
+    textSize(10)
+    text("Amplitude: " + str(A*10) + " cm", -550, 190)
+    
+    omega = sqrt(k/m)
+    
     # Starten
     if  mouseButton == LEFT and 10 <= mouseX <= 90 and 10 <= mouseY <= 40 : 
         prg_lauft = 1
@@ -80,12 +94,12 @@ def draw():
         linie_button3 = 255 # Reset-Knopf-Kontur wird Gelb
     
     if prg_lauft == 0: # Stopp, wenn Programm nicht läuft
-        cosinuskurve()
-        federpendel() # Zeichnet aktuellen Stand der Federpendel und der Cosinuskurve
+        cosinuskurve(A, omega)
+        federpendel(A, omega) # Zeichnet aktuellen Stand der Federpendel und der Cosinuskurve
         
     if prg_lauft == 1 : # Start, wenn Programm läuft
-        cosinuskurve()
-        federpendel()
+        cosinuskurve(A, omega)
+        federpendel(A, omega)
         t = t + 0.04 # 0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
         # Zeichnet immer wieder Stand der Federpendel und der Cosinuskurve und erhöht die Zeit um 0.04
         # 0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
@@ -93,10 +107,10 @@ def draw():
     if prg_lauft == 2: # Reset, wenn Programm neugestartet wird
         t = 0 # Zurücksetzen der relevanten Variablen
 
-        federpendel() # zeichnet Anfangsposition des Federpendels
+        federpendel(A, omega) # zeichnet Anfangsposition des Federpendels
 
     if prg_lauft == 3: # Anfangsphase, noch kein Punkt auf Graph
-        federpendel()
+        federpendel(A, omega)
 
 #Knöpfe
 
@@ -157,18 +171,16 @@ def grid():
 
         
 # Cosinuskurve zeichnen
-def cosinuskurve(): 
-    global A, k, m, t, rand
-    
-    omega = sqrt(k/m)
+def cosinuskurve(A, omega): 
+    global k, m, t, rand
     
     # Vorderster Punkt
     strokeWeight(10)
     stroke(255, 100, 0)
     if t <= rand: # bis zum Rand
-        point(25*t, -A*cos(omega * t)*200) # 25 = Streckung x-Achse, 200 = Streckung y-Achse
+        point(25*t, -A*cos(omega * t)*streckung) # 25 = Streckung x-Achse
     else: # auf dem Rand
-        point(25*rand, -A*cos(omega * t)*200)
+        point(25*rand, -A*cos(omega * t)*streckung)
     
     # kleine Punkte der Kurve
     strokeWeight(3)
@@ -176,24 +188,22 @@ def cosinuskurve():
     l = 0
     if t <= rand: # bis zum Rand
         while l <= t :
-            point(25*l, -A*cos(omega * l )*200)
+            point(25*l, -A*cos(omega * l )*streckung)
             l = l + 0.04
     else: # Punktebewegung vor dem Rand
         for r in range(0, 25*rand) :
-            point(25*rand - r, -A*cos(omega*(r*0.04-t))*200)
+            point(25*rand - r, -A*cos(omega*(r*0.04-t))*streckung)
     
 
 # Zeitangabe oben rechts
 def zeit():
     fill(0)
     textSize(10)
-    text(t, 480, -285)
-    text("Sekunden", 530, -285)
+    text("Zeit: " +str(t) + " Sekunden", 480, -285)
 
     
 # Gewicht des Federpendels zeichnen
-def federpendel(): 
-    omega = sqrt(k/m)
+def federpendel(A, omega): 
     
     noStroke()
     fill(200)
@@ -201,8 +211,69 @@ def federpendel():
     
     strokeWeight(2)
     stroke(0)
-    line(-300,-270,-300,-A*cos(omega*t)*200)
+    line(-300,-270,-300,-A*cos(omega*t)*streckung)
     strokeWeight(25)
     stroke(255, 100, 0)
-    point(-300, -A*cos(omega*t)*200) # Kreieren der neuen Zeichnung (Ball und Linie)
+    point(-300, -A*cos(omega*t)*streckung) # Kreieren der neuen Zeichnung (Ball und Linie)
     
+
+'''
+' Schieberegler
+' Simon Hefti, Okt. 2020
+'''
+
+'''angepasst auf Translation'''
+
+# Funktion: Schieberegler generieren
+# objX:      X-Position des Reglers
+# objY:      Y-Position des Reglers
+# objLength: Länge des Reglers
+def draw_ruler(objX_vorher, objY_vorher, objLength):
+    global movingMode
+    global pointerPos
+    global pointerVal
+    
+    objX =  objX_vorher + width/2 # Anpassung wegen Translation
+    objY =  objY_vorher + height/2 # Anpassung wegen Translation
+    
+    # Schieber einstellen
+    pointerRadius = 12
+    if pointerPos == 0: 
+        pointerPos = objX+ objLength/2 # angepasst wegen Mitte
+    
+    # Linie zeichnen
+    fill(85)
+    strokeWeight(3)
+    line(objX_vorher, objY_vorher, objX_vorher + objLength, objY_vorher)
+    fill(185)
+    strokeWeight(2)
+    
+    # Überprüfen ob Schieber angeklickt worden ist --> Bewegungsmodus aktivieren
+    if mouseX >  pointerPos - pointerRadius  and mouseX <  pointerPos + pointerRadius and mouseY > objY - pointerRadius  and mouseY < objY + pointerRadius and mousePressed == True:
+        movingMode = True
+    
+    # Wenn keine Maustaste gedrückt ist --> Bewegungsmodus deaktivieren
+    if mousePressed == False:
+        movingMode = False
+        cursor(ARROW)
+    
+    # Bei aktiviertem Bewegungsmodus
+    if movingMode == True:
+        cursor(HAND)
+        
+        # Schieber der Line entlang bewegen
+        if mouseX > objX and mouseX < objX + objLength:
+            pointerPos = mouseX
+        
+        # Wenn Maus ausserhalb der Linie, Schieber am Start oder Ende fixieren
+        else:
+            if mouseX < objX:
+                pointerPos = objX
+            if mouseX > objX:
+                pointerPos = objX + objLength
+
+    # Schieber zeichnen            
+    circle(pointerPos-width/2, objY_vorher, pointerRadius) # angepasst wegen Translation
+    
+    # Eingestellter Wert anhand der Schieberposition ermitteln
+    pointerVal = int(200 / float(objLength) * (pointerPos - objX - objLength/2 )) # angepasst wegen Mitte
