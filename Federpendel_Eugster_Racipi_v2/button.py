@@ -9,5 +9,5 @@ def button(kontur_dicke, kontur_farbe, button_farbe_r, button_farbe_g, button_fa
     rect(button_xpos, button_ypos, button_laenge, button_breite)
     textAlign(CENTER)
     fill(255)
-    textSize(20)
+    textSize(25)
     text(name, button_xpos + button_laenge/2 , button_ypos + 2*button_breite/3)
