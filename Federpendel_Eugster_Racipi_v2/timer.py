@@ -2,8 +2,8 @@
 
 
 # Zeitangabe oben rechts
-def timer(posX, posY, t):
+def timer(posX, posY, t, text_size):
     fill(0)
-    textSize(25)
-    text("Zeit: " +str(t), posX, posY)
-    text("Sekunden", posX+140, posY)
+    textSize(text_size)
+    textAlign(RIGHT)
+    text("Zeit: " + str(t) + " Sekunden", posX, posY)
