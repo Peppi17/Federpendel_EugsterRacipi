@@ -4,15 +4,17 @@ from timer import timer
 from federpendel import federpendel
 from cosinuskurve import cosinuskurve
 
-
+#Variablen für Schieberegler A
 movingMode_A = False
 pointerPos_A = 0
 pointerVal_A = 1.0
 
+#Variablen für Schieberegler k
 movingMode_k = False
 pointerPos_k = 0
 pointerVal_k = 1.0
 
+#Variablen für Schieberegler m
 movingMode_m = False
 pointerPos_m = 0
 pointerVal_m = 1.0
@@ -34,11 +36,12 @@ rand = bild_width/2-120 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen sol
 prg_lauft = 3 # 0 = Programm läuft nicht / 1 = Programm läuft /
               # 2 = Programm neugestartet / 3 = Anfang des Programms
 
+'''
 # Variablen für physikalische Formeln
 A = 1 # Amplitude
 k = TWO_PI # Federstärke
 m = 1 # Masse
-
+      # müssen gar nicht global sein. Vielleicht sind ein paar Variablen nicht global'''
 
 ##### Knöpfe (button.py) #############################################################
 
