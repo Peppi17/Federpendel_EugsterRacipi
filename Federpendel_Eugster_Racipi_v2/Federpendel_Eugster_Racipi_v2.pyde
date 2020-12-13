@@ -331,7 +331,6 @@ def federpendel(A, omega, t, streckung, objX, objY, obj_laenge, obj_breite):
 # objX:      X-Position des Reglers
 # objY:      Y-Position des Reglers
 # objLength: Länge des Reglers
-'''def draw_ruler(objX_vorher, objY_vorher, objLength, pointerPos, PointerVal, movingMode):'''
 def draw_ruler_A(objX_vorher, objY_vorher, objLength):    
     global movingMode_A
     global pointerPos_A
