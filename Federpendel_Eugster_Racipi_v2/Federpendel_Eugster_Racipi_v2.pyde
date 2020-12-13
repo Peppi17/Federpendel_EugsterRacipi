@@ -20,9 +20,9 @@ pointerValm = 1.0
 
 
 
-bild_width = 1000
-bild_height = 1000
-abstand_rand = 10
+bild_width = 1600
+bild_height = 900
+
 
 # allgemeine Variablen und Variablen für das Zeichnen der Cosinuskurve
 t = 0 # Zeit
@@ -42,9 +42,10 @@ m = 1 # Masse
 ##### Knöpfe (button.py) #############################################################
 
 # Grösse Knöpfe
-knopf_laenge = 80
-knopf_breite = 30
-abstand_knoepfe = 10
+knopf_laenge = 120
+knopf_breite = 50
+abstand_knoepfe = 20
+abstand_rand = 20
 
 # Koordinaten Knöpfe --> eventuell unten direkt bei Knöpfe??
 start_x = -bild_width/2 + abstand_rand
@@ -80,6 +81,15 @@ zeit_y = -bild_height/2 + 30
 
 ##############################################################################################
 
+
+start_kontur_dicke = 0
+stop_kontur_dicke = 0 
+reset_kontur_dicke = 0
+start_kontur_farbe = 0
+stop_kontur_farbe = 0
+reset_kontur_farbe = 0
+
+
 balken_laenge = 60
 balken_breite = 30
 balken_x = -bild_width/5
@@ -100,7 +110,7 @@ def setup():
     frameRate(25) # Bilder pro Sekunde
     
 def draw():
-    global prg_lauft, t, start, stop, reset, linie_button1, linie_button2, linie_button3
+    global prg_lauft, t, start_kontur_dicke, stop_kontur_dicke, reset_kontur_dicke, start_kontur_farbe, stop_kontur_farbe, reset_kontur_farbe
     global xmax, xmin, ymax, ymin, xscl, yscl, rangex, rangey, pointerVal, pointerPos
     global start_x, start_y, stop_x, stop_y, reset_x, reset_y, knopf_laenge, knopf_breite
     global schiebe_laenge, schiebe1_x, schiebe2_x, schiebe1_y, schiebe2_y, movingMode1, pointerPos1, pointerValA, movingMode2, pointerPos2, pointerValk  
@@ -130,32 +140,32 @@ def draw():
     # Starten
     if  mouseButton == LEFT and start_x + w <= mouseX <= start_x + knopf_laenge + w and start_y + h <= mouseY <= start_y + knopf_breite + h : 
         prg_lauft = 1
-        start = 2 # Start-Knopf-Kontur wird 2 Pixel dick
-        stop = 0
-        reset = 0
-        linie_button1 = 255 # Start-Knopf-Kontur wird Gelb
-        linie_button2 = 0
-        linie_button3 = 0
+        start_kontur_dicke = 6 # Start-Knopf-Kontur wird 2 Pixel dick
+        stop_kontur_dicke = 0
+        reset_kontur_dicke = 0
+        start_kontur_farbe = 255 # Start-Knopf-Kontur wird Gelb
+        stop_kontur_farbe = 0
+        reset_kontur_farbe = 0
     
     # Stoppen
     if  mouseButton == LEFT and stop_x + w <= mouseX <= stop_x + knopf_laenge + w and stop_y + h <= mouseY <= stop_y + knopf_breite + h : 
         prg_lauft = 0
-        start = 0
-        stop = 2 # Stop-Knopf-Kontur wird 2 Pixel dick
-        reset = 0
-        linie_button1 = 0
-        linie_button2 = 255 # Stop-Knopf-Kontur wird Gelb
-        linie_button3 = 0
+        start_kontur_dicke = 0
+        stop_kontur_dicke = 6 # Stop-Knopf-Kontur wird 2 Pixel dick
+        reset_kontur_dicke = 0
+        start_kontur_farbe = 0
+        stop_kontur_farbe = 255 # Stop-Knopf-Kontur wird Gelb
+        reset_kontur_farbe = 0
         
     # Resetten
     if  mouseButton == LEFT and reset_x + w <= mouseX <= reset_x + knopf_laenge + w and reset_y + h <= mouseY <= reset_y + knopf_breite + h : 
         prg_lauft = 2
-        start = 0
-        stop = 0
-        reset = 2 # Reset-Knopf-Kontur wird 2 Pixel dick
-        linie_button1 = 0
-        linie_button2 = 0
-        linie_button3 = 255 # Reset-Knopf-Kontur wird Gelb
+        start_kontur_dicke = 0
+        stop_kontur_dicke = 0
+        reset_kontur_dicke = 6 # Reset-Knopf-Kontur wird 2 Pixel dick
+        start_kontur_farbe = 0
+        stop_kontur_farbe = 0
+        reset_kontur_farbe = 255 # Reset-Knopf-Kontur wird Gelb
     
     if prg_lauft == 0: # Stopp, wenn Programm nicht läuft
         cosinuskurve(A, omega)
@@ -181,13 +191,13 @@ def draw():
 ##### Knöpfe ###########################################################################################
 
     # Start-Button
-    button(0, 0, 0, 153, 0, start_x, start_y, knopf_laenge, knopf_breite, "Start")
+    button(start_kontur_dicke, start_kontur_farbe, 0, 153, 0, start_x, start_y, knopf_laenge, knopf_breite, "Start")
 
     # Stop-Button
-    button(0, 0, 153, 0, 0, stop_x, stop_y, knopf_laenge, knopf_breite, "Stop")
+    button(stop_kontur_dicke, stop_kontur_farbe, 153, 0, 0, stop_x, stop_y, knopf_laenge, knopf_breite, "Stop")
     
     # Reset-Button
-    button(0, 0, 200, 200, 200, reset_x, reset_y, knopf_laenge, knopf_breite, "Reset")
+    button(reset_kontur_dicke, reset_kontur_farbe, 200, 200, 200, reset_x, reset_y, knopf_laenge, knopf_breite, "Reset")
     
 ########################################################################################################
     
