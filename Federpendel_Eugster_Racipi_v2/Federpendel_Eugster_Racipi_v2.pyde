@@ -1,3 +1,7 @@
+from button import button
+from grid import grid
+from timer import timer
+
 
 movingMode = False
 pointerPos = 0
@@ -12,11 +16,19 @@ pointerPos3 = 0
 pointerValm = 1.0
 
 '''
+
+
+
+
+bild_width = 1000
+bild_height = 1000
+abstand_rand = 10
+
 # allgemeine Variablen und Variablen für das Zeichnen der Cosinuskurve
 t = 0 # Zeit
 streckung = 100 #100 = Streckung y-Achse
 
-rand = 19 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen soll.
+rand = bild_width/2-120 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen soll.
 
 prg_lauft = 3 # 0 = Programm läuft nicht / 1 = Programm läuft /
               # 2 = Programm neugestartet / 3 = Anfang des Programms
@@ -27,30 +39,47 @@ k = TWO_PI # Federstärke
 m = 1 # Masse
 
 
-# Variablen für Knöpfe
-start = 0 # Konturdicke Start-Knopf
-stop = 0 # Konturdicke Stop-Knopf
-reset = 0 # Konturdicke Reset-Knopf
+##### Knöpfe (button.py) #############################################################
 
-linie_button1 = 0 # R- und G-Wert des Start-Knopfs 
-linie_button2 = 0 # R- und G-Wert des Stop-Knopfs
-linie_button3 = 0 # R- und G-Wert des Reset-Knopfs 
-
-bild_width = 1000
-bild_height = 500
-abstand_rand = 10
-abstand_knoepfe = 10
-
-#Koordinaten Knöpfe
+# Grösse Knöpfe
 knopf_laenge = 80
 knopf_breite = 30
+abstand_knoepfe = 10
+
+# Koordinaten Knöpfe --> eventuell unten direkt bei Knöpfe??
 start_x = -bild_width/2 + abstand_rand
 start_y = -bild_height/2 + abstand_rand
 stop_x = -bild_width/2 + abstand_rand + knopf_laenge + abstand_knoepfe
 stop_y = -bild_height/2 + abstand_rand 
 reset_x = -bild_width/2 + abstand_rand
 reset_y = -bild_height/2 + abstand_rand + knopf_breite + abstand_knoepfe
+
+#######################################################################################
+
+###### Raster (grid.py) ###############################################################
+
+# Skala für das Raster des Graphen
+xscl = 25 # 1 Schritt entspricht 1 Sekunde, wegen frameRate 25
+yscl = 20
+    
+# X-Werte des Graphen
+xmin = 0 
+xmax = bild_width/2
+
+# Y-Werte des Graphen
+ymin = -bild_height/2
+ymax = bild_height/2
+
+#######################################################################################
  
+##### Zeit (timer.py) ########################################################################
+
+# Timer Position --> eventuell unten direkt im draw??
+zeit_x = bild_width/2 - 275
+zeit_y = -bild_height/2 + 30
+
+##############################################################################################
+
 balken_laenge = 60
 balken_breite = 30
 balken_x = -bild_width/5
@@ -64,26 +93,6 @@ schiebe1_x = -bild_width/2 + abstand_rand_sch_x
 schiebe1_y = bild_height/2 - abstand_rand_sch_y
 schiebe2_x = -bild_width/2 + abstand_rand_sch_x
 schiebe2_y = bild_height/2 - abstand_rand_sch_y - abstand_schiebe 
-
-zeit_x = bild_width/2 - 120
-zeit_y = -bild_height/2 + 15
-
-
-# Variablen für das Raster des Graphen
-xscl = 25 # 1 Schritt entspricht 1 Sekunde, wegen frameRate 25
-yscl = 20
-    
-# Bereich X-Werte des Graphs
-xmin = 0 
-xmax = bild_width/2 # halbe Bildschirmbreite : x-Streckung = Skala (t = 1 s)
-
-# Bereich Y-Werte des Graphs
-ymin = -bild_height/2
-ymax = bild_height/2 # halbe Bildschirmhöhe : y-Streckung = Skala (x = 10 cm)
-    
-# Bereich Graph
-rangex = xmax - xmin
-rangey = ymax - ymin
 
 
 def setup():
@@ -100,8 +109,11 @@ def draw():
     w = width/2
     h = height/2
     
-    grid(xscl, yscl, xmax, xmin, ymax, ymin, rangex, rangey) # Zeichnen des Rasters
-    zeit(zeit_x, zeit_y) # Zeitangabe oben rechts
+    # Raster zeichnen
+    grid(xscl, yscl, xmax, xmin, ymax, ymin) # Zeichnen des Rasters
+    
+    # Zeitangabe oben rechts
+    timer(zeit_x, zeit_y, t)
     
     # Schieberegler für Amplitude
     draw_ruler(schiebe1_x, schiebe1_y, schiebe_laenge)
@@ -166,18 +178,21 @@ def draw():
     if prg_lauft == 3: # Anfangsphase, noch kein Punkt auf Graph
         federpendel(A, omega, streckung, balken_x, balken_y, balken_laenge, balken_breite)
 
-#Knöpfe
+##### Knöpfe ###########################################################################################
 
     # Start-Button
-    button(start, linie_button1, 0, 153, 0, start_x, start_y, knopf_laenge, knopf_breite, "Start")
+    button(0, 0, 0, 153, 0, start_x, start_y, knopf_laenge, knopf_breite, "Start")
 
     # Stop-Button
-    button(stop, linie_button2, 153, 0, 0, stop_x, stop_y, knopf_laenge, knopf_breite, "Stop")
+    button(0, 0, 153, 0, 0, stop_x, stop_y, knopf_laenge, knopf_breite, "Stop")
     
     # Reset-Button
-    button(reset, linie_button3, 200, 200, 200, reset_x, reset_y, knopf_laenge, knopf_breite, "Reset")
+    button(0, 0, 200, 200, 200, reset_x, reset_y, knopf_laenge, knopf_breite, "Reset")
     
-
+########################################################################################################
+    
+    
+'''
 def button(kontur_dicke, farbe_linie, farbe_button1, farbe_button2, farbe_button3 , button_x, button_y, button_laenge, button_breite, name):
     strokeWeight(kontur_dicke)
     stroke(farbe_linie, farbe_linie, 0)
@@ -187,8 +202,10 @@ def button(kontur_dicke, farbe_linie, farbe_button1, farbe_button2, farbe_button
     fill(255)
     textSize(20)
     text(name, button_x + button_laenge/2 , button_y + 2*button_breite/3)
-        
-    
+'''        
+
+
+'''    
 # Kariertes Raster
 def grid(xscl, yscl, xmax, xmin, ymax, ymin, rangex, rangey):
     background(255) # weisser Hintergrund
@@ -215,7 +232,7 @@ def grid(xscl, yscl, xmax, xmin, ymax, ymin, rangex, rangey):
     textAlign(LEFT)
     text("Zeit t",xmax-50,15) # Text "Zeit t" zur X-Achse
     text("Amplitude A",5,ymin+20) # Text "Amplitude A" zur Y-Achse
-
+'''
         
 # Cosinuskurve zeichnen
 def cosinuskurve(A, omega): 
@@ -224,30 +241,30 @@ def cosinuskurve(A, omega):
     # Vorderster Punkt
     strokeWeight(10)
     stroke(255, 100, 0)
-    if t <= rand: # bis zum Rand
+    if t*25 <= rand: # bis zum Rand
         point(25*t, -A*cos(omega * t)*streckung) # 25 = Streckung x-Achse
     else: # auf dem Rand
-        point(25*rand, -A*cos(omega * t)*streckung)
+        point(rand, -A*cos(omega * t)*streckung)
     
     # kleine Punkte der Kurve
     strokeWeight(3)
     stroke(100)
     l = 0
-    if t <= rand: # bis zum Rand
+    if t*25 <= rand: # bis zum Rand
         while l <= t :
             point(25*l, -A*cos(omega * l )*streckung)
             l = l + 0.04
     else: # Punktebewegung vor dem Rand
-        for r in range(0, 25*rand) :
-            point(25*rand - r, -A*cos(omega*(r*0.04-t))*streckung)
+        for r in range(0, rand) :
+            point(rand - r, -A*cos(omega*(r*0.04-t))*streckung)
     
-
+'''
 # Zeitangabe oben rechts
 def zeit(posX, posY):
     fill(0)
     textSize(10)
     text("Zeit: " +str(t) + " Sekunden", posX, posY)
-
+'''
     
 # Gewicht des Federpendels zeichnen
 def federpendel(A, omega, streckung, objX, objY, obj_laenge, obj_breite): 
