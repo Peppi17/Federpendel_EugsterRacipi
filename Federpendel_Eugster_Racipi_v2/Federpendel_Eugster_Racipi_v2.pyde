@@ -6,8 +6,8 @@ from cosinuskurve import cosinuskurve
 
 
 # Definieren der Bildschirmgroesse
-bild_width = 1200
-bild_height = 600
+bild_width = 1800
+bild_height = 1200
 
 # Definieren der Schriftgroesse abhaengig von der Bildschirmhoehe
 text_groesse = bild_height/36 # je nach Bildschirmgroesse -> Schriftgroesse-Anpassung
@@ -15,9 +15,10 @@ text_groesse = bild_height/36 # je nach Bildschirmgroesse -> Schriftgroesse-Anpa
 
 # allgemeine Variablen und Variablen fuer das Zeichnen der Cosinuskurve
 t = 0 # Zeit
-streckung = 100 #100 = Streckung y-Achse
+streckungY = 100 #100 = Streckung y-Achse '''wo wird das benutzt???'''
 
 rand = bild_width/2-100 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen soll.
+''' -100 ev. auch von text_groesse abhängig machen, da bei grossm bild sonst zu wenig, vielleicht auch zweite streckung definieren? '''
 
 prg_lauft = 3 # 0 = Programm laeuft nicht / 1 = Programm laeuft /
               # 2 = Programm neugestartet / 3 = Anfang des Programms
@@ -39,8 +40,9 @@ knopf_breite = bild_height/18
 abstand_knoepfe = bild_width/90
 abstand_rand_x = 10
 abstand_rand_y = text_groesse*2.5 + 15 + abstand_knoepfe # vom oberen Rand -5, dann - Titelrechteckbreite(text_groesse*2.5 + 10), dann - Abstand zwischen den Knoepfen
+'''hääää??'''
 
-# Koordinaten Knoepfe --> eventuell unten direkt bei Knoepfe??
+# Koordinaten Knoepfe  --> eventuell unten direkt bei Knoepfe??
 start_x = -bild_width/2 + abstand_rand_x
 start_y = -bild_height/2 + abstand_rand_y
 stop_x = -bild_width/2 + abstand_rand_x + knopf_laenge + abstand_knoepfe
@@ -48,13 +50,15 @@ stop_y = -bild_height/2 + abstand_rand_y
 reset_x = -bild_width/2 + abstand_rand_x
 reset_y = -bild_height/2 + abstand_rand_y + knopf_breite + abstand_knoepfe
 
-# Farbe und Kontur der Knöpfe
+'''# Farbe und Kontur der Knöpfe
 start_kontur_dicke = 0
 stop_kontur_dicke = 0 
 reset_kontur_dicke = 0
 start_kontur_farbe = 0
 stop_kontur_farbe = 0
 reset_kontur_farbe = 0
+--> unnötig
+'''
 
 kontur_dicke = knopf_laenge/25 # Konturdicke beim Leuchten
 
@@ -149,6 +153,7 @@ def draw():
     timer(xmax, ymin, t, text_groesse)
     
     # Titel
+    '''text zu gross für rechteck --> ev. auch schöner ohne rechteck im hintergrund?'''
     noStroke()
     fill(50)
     rect(-w + abstand_rand_x + 2, -h + 5 + 2, titel_laenge, titel_breite)
@@ -163,7 +168,7 @@ def draw():
     textAlign(LEFT)
     textSize(3*text_groesse/4)
     fill(0)
-    text("Diese Animation simuliert einen Federpendel ohne Daempfung.", -w+abstand_rand_x, h-10)
+    text("Diese Animation simuliert ein Federpendel ohne Daempfung.", -w+abstand_rand_x, h-10) #abstand_rand_y?
  
     
     # Schieberegler fuer Amplitude
@@ -172,7 +177,7 @@ def draw():
     if pointerVal_A <= 0:
         A = 1 + pointerVal_A*0.01
     else:
-        A = 1 + (((bild_height/2.0 - 40)/streckung) - 1)*pointerVal_A*0.01 # damit Amplitude moeglichst gross, je nach Bildschirmhoehe, werden kann
+        A = 1 + (((bild_height/2.0 - 40)/streckungY) - 1)*pointerVal_A*0.01 # damit Amplitude moeglichst gross, je nach Bildschirmhoehe, werden kann
     
     fill(0)
     textAlign(LEFT)
@@ -238,6 +243,7 @@ def draw():
     text("Masse: " + akt_m, schiebe_m_x, schiebe_m_y - 10)
     
     # Frequenz & Periode
+    '''auf weniger stellen runden und besser positionieren, überlappens sich bei mir'''
     omega = sqrt(k/m) # Erstellen der Variable omega fuer cosinuskurve, abhaengig von Federkonstante und Masse
     textAlign(LEFT)
     textSize(3*text_groesse/4)
@@ -260,8 +266,8 @@ def draw():
 
     
     if prg_lauft == 0: # Stopp, wenn Programm nicht laeuft
-        cosinuskurve(A, omega, k, m, t, rand, streckung)
-        federpendel(A, omega, t, streckung, balken_x, balken_y, balken_laenge, balken_breite, k, m) # Zeichnet aktuellen Stand der Federpendel und der Cosinuskurve
+        cosinuskurve(A, omega, k, m, t, rand, streckungY)
+        federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m) # Zeichnet aktuellen Stand der Federpendel und der Cosinuskurve
         
         start_kontur_dicke = 0
         stop_kontur_dicke = kontur_dicke # Stop-Knopf-Kontur wird dicker
@@ -271,8 +277,8 @@ def draw():
         reset_kontur_farbe = 0
         
     if prg_lauft == 1 : # Start, wenn Programm laeuft
-        cosinuskurve(A, omega, k, m, t, rand, streckung)
-        federpendel(A, omega, t, streckung, balken_x, balken_y, balken_laenge, balken_breite, k, m)
+        cosinuskurve(A, omega, k, m, t, rand, streckungY)
+        federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m)
         t = t + 0.04 # 0.04 weil 1 s : 25 Bilder/s = Veraenderung von 0.04 pro Bild
         # Zeichnet immer wieder Stand des Federpendels und der Cosinuskurve und erhoeht die Zeit um 0.04
         
@@ -292,19 +298,23 @@ def draw():
         pointerVal_k = PI
         pointerPos_m = 0
         pointerVal_m = 1.0
+        
+        
+        prg_lauft = 3 #wäre auch eine option???
+        
             
-        federpendel(A, omega, t, streckung, balken_x, balken_y, balken_laenge, balken_breite, k, m) # zeichnet Anfangsposition des Federpendels
+        '''federpendel(A, omega, t, streckung, balken_x, balken_y, balken_laenge, balken_breite, k, m) # zeichnet Anfangsposition des Federpendels
             
         start_kontur_dicke = 0
         stop_kontur_dicke = 0
         reset_kontur_dicke = kontur_dicke # Reset-Knopf-Kontur wird 2 Pixel dick
         start_kontur_farbe = 0
         stop_kontur_farbe = 0
-        reset_kontur_farbe = 255 # Reset-Knopf-Kontur wird Gelb
+        reset_kontur_farbe = 255 # Reset-Knopf-Kontur wird Gelb'''
     
 
     if prg_lauft == 3: # Anfangsphase, noch kein Punkt auf Graph
-        federpendel(A, omega, t, streckung, balken_x, balken_y, balken_laenge, balken_breite, k, m)
+        federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m)
         
         start_kontur_dicke = 0 
         stop_kontur_dicke = 0
@@ -425,6 +435,9 @@ def federpendel(A, omega, t, streckung, objX, objY, obj_laenge, obj_breite):
 '''
 
 '''angepasst auf Translation'''
+
+
+'''Schieberegler viel zu klein'''
 
 # Funktion: Schieberegler generieren
 # objX:      X-Position des Reglers
