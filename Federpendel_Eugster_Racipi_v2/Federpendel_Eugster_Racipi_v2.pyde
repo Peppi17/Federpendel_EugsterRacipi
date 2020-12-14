@@ -6,8 +6,8 @@ from cosinuskurve import cosinuskurve
 
 
 # Definieren der Bildschirmgroesse
-bild_width = 1000
-bild_height = 400
+bild_width = 1200
+bild_height = 600
 
 # Definieren der Schriftgroesse abhaengig von der Bildschirmhoehe
 text_groesse = bild_height/36 # je nach Bildschirmgroesse -> Schriftgroesse-Anpassung
@@ -154,17 +154,17 @@ def draw():
     rect(-w + abstand_rand_x + 2, -h + 5 + 2, titel_laenge, titel_breite)
     fill(150)
     rect(-w + abstand_rand_x, -h + 5, titel_laenge, titel_breite)
-    textAlign(CENTER, TOP)
-    textSize(text_groesse*2.5)
+    textAlign(CENTER)
+    textSize(text_groesse*2)
     fill(255)
-    text("Federpendel", -w + abstand_rand_x + titel_laenge/2, -h + 5)
+    text("Federpendel", -w + abstand_rand_x + titel_laenge/2, -h + 5 + 2*titel_breite/3)
     
-    #Beschreibung
+    # Beschreibung
     textAlign(LEFT)
     textSize(3*text_groesse/4)
     fill(0)
     text("Diese Animation simuliert einen Federpendel ohne Daempfung.", -w+abstand_rand_x, h-10)
-    
+ 
     
     # Schieberegler fuer Amplitude
     draw_ruler_A(schiebe_A_x, schiebe_A_y, schiebe_laenge)
@@ -237,9 +237,15 @@ def draw():
     textSize(10)
     text("Masse: " + akt_m, schiebe_m_x, schiebe_m_y - 10)
     
-    # Erstellen der Variable omega fuer cosinuskurve, abhaengig von Federkonstante und Masse
-    omega = sqrt(k/m)
-    
+    # Frequenz & Periode
+    omega = sqrt(k/m) # Erstellen der Variable omega fuer cosinuskurve, abhaengig von Federkonstante und Masse
+    textAlign(LEFT)
+    textSize(3*text_groesse/4)
+    fill(0)
+    frequenz = omega / TWO_PI
+    periode = 1/frequenz
+    text("Frequenz: " + str(frequenz) + " Hz", abstand_rand_x, h-10)
+    text("Periode: " + str(periode) + " s", abstand_rand_x + bild_width/6, h - 10)
     # Starten
     if  mouseButton == LEFT and start_x + w <= mouseX <= start_x + knopf_laenge + w and start_y + h <= mouseY <= start_y + knopf_breite + h : 
         prg_lauft = 1
