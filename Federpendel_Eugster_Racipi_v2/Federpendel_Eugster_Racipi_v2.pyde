@@ -5,25 +5,9 @@ from federpendel import federpendel
 from cosinuskurve import cosinuskurve
 
 
-
-#Variablen fuer Schieberegler A
-movingMode_A = False
-pointerPos_A = 0
-pointerVal_A = 1.0
-
-#Variablen fuer Schieberegler k
-movingMode_k = False
-pointerPos_k = 0
-pointerVal_k = 1.0
-
-#Variablen fuer Schieberegler m
-movingMode_m = False
-pointerPos_m = 0
-pointerVal_m = 1.0
-
 # Definieren der Bildschirmgroesse
-bild_width = 1200
-bild_height = 500
+bild_width = 1000
+bild_height = 400
 
 # Definieren der Schriftgroesse abhaengig von der Bildschirmhoehe
 text_groesse = bild_height/36 # je nach Bildschirmgroesse -> Schriftgroesse-Anpassung
@@ -53,8 +37,8 @@ m = 1 # Masse
 knopf_laenge = bild_width/12
 knopf_breite = bild_height/18
 abstand_knoepfe = bild_width/90
-abstand_rand_x = 20
-abstand_rand_y = text_groesse*2.5 + 15 + abstand_knoepfe # vom oberen Rand -5, dann - Titelrechteck, Breite, dann - Abstand zwischen den Knoepfen
+abstand_rand_x = 10
+abstand_rand_y = text_groesse*2.5 + 15 + abstand_knoepfe # vom oberen Rand -5, dann - Titelrechteckbreite(text_groesse*2.5 + 10), dann - Abstand zwischen den Knoepfen
 
 # Koordinaten Knoepfe --> eventuell unten direkt bei Knoepfe??
 start_x = -bild_width/2 + abstand_rand_x
@@ -64,7 +48,7 @@ stop_y = -bild_height/2 + abstand_rand_y
 reset_x = -bild_width/2 + abstand_rand_x
 reset_y = -bild_height/2 + abstand_rand_y + knopf_breite + abstand_knoepfe
 
-# Farbe und Konturfarbe der Knöpfe
+# Farbe und Kontur der Knöpfe
 start_kontur_dicke = 0
 stop_kontur_dicke = 0 
 reset_kontur_dicke = 0
@@ -72,10 +56,11 @@ start_kontur_farbe = 0
 stop_kontur_farbe = 0
 reset_kontur_farbe = 0
 
-kontur_dicke = knopf_laenge/25
+kontur_dicke = knopf_laenge/25 # Konturdicke beim Leuchten
 
 #######################################################################################
 
+# Variablen für Titel-Position
 titel_laenge = 2*knopf_laenge + abstand_knoepfe
 titel_breite = text_groesse*2.5 + 10
 
@@ -95,23 +80,46 @@ ymax = bild_height/2
 
 #######################################################################################
  
-
+###### Animation des Federpendels (federpendel.py) ####################################
 
 balken_laenge = 60
 balken_breite = 30
 balken_x = -bild_width/5 
 balken_y = -bild_height/2 + 5
 
-abstand_rand_sch_x = abstand_rand_x
-abstand_rand_sch_y = 50
-abstand_schiebe = 40
-schiebe_laenge = 150
+#######################################################################################
+
+###### Variablen der Schiebergler #####################################################
+
+abstand_rand_sch_x = abstand_rand_x # x-Abstand vom Rand fuer Schieberegler
+abstand_rand_sch_y = 50 # y-Abstand vom Rand fuer Schieberegler
+abstand_schiebe = 40 # x-Abstand zwischen Schieberegler
+schiebe_laenge = 150 # Länge des Schiereglers
+
+# Positionen der Schieberegler
 schiebe_A_x = -bild_width/2 + abstand_rand_sch_x
 schiebe_A_y = bild_height/2 - abstand_rand_sch_y
 schiebe_k_x = -bild_width/2 + abstand_rand_sch_x
 schiebe_k_y = bild_height/2 - abstand_rand_sch_y - abstand_schiebe
 schiebe_m_x = -bild_width/2 + abstand_rand_sch_x
-schiebe_m_y = bild_height/2 - abstand_rand_sch_y - 2*abstand_schiebe 
+schiebe_m_y = bild_height/2 - abstand_rand_sch_y - 2*abstand_schiebe
+
+#Variablen fuer Schieberegler zu A
+movingMode_A = False
+pointerPos_A = 0
+pointerVal_A = 1.0
+
+#Variablen fuer Schieberegler zu k
+movingMode_k = False
+pointerPos_k = 0
+pointerVal_k = 1.0
+
+#Variablen fuer Schieberegler zu m
+movingMode_m = False
+pointerPos_m = 0
+pointerVal_m = 1.0
+
+#######################################################################################
 
 
 def setup():
@@ -142,7 +150,7 @@ def draw():
     
     # Titel
     noStroke()
-    fill(0)
+    fill(50)
     rect(-w + abstand_rand_x + 2, -h + 5 + 2, titel_laenge, titel_breite)
     fill(150)
     rect(-w + abstand_rand_x, -h + 5, titel_laenge, titel_breite)
@@ -568,5 +576,3 @@ def draw_ruler_m(objX_vorher, objY_vorher, objLength):
     # Eingestellter Wert anhand der Schieberposition ermitteln
     pointerVal_m = int(100 / float(objLength) * (pointerPos_m - objX)) 
         
-    
-    
