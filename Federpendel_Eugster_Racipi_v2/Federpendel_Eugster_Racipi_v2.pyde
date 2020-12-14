@@ -21,8 +21,8 @@ pointerVal_m = 1.0
 
 
 
-bild_width = 1200
-bild_height = 500
+bild_width = 1000
+bild_height = 800
 
 text_groesse = bild_height/36 # je nach Bildschirmgrösse -> Schriftgrösse-Anpassung
 
@@ -31,7 +31,7 @@ text_groesse = bild_height/36 # je nach Bildschirmgrösse -> Schriftgrösse-Anpa
 t = 0 # Zeit
 streckung = 100 #100 = Streckung y-Achse
 
-rand = bild_width/2-120 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen soll.
+rand = bild_width/2-175 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen soll.
 
 prg_lauft = 3 # 0 = Programm läuft nicht / 1 = Programm läuft /
               # 2 = Programm neugestartet / 3 = Anfang des Programms
@@ -77,14 +77,6 @@ ymax = bild_height/2
 
 #######################################################################################
  
-##### Zeit (timer.py) ########################################################################
-
-# Timer Position --> eventuell unten direkt im draw??
-zeit_x = bild_width/2 - 30
-zeit_y = -bild_height/2 + 30
-
-##############################################################################################
-
 
 start_kontur_dicke = 0
 stop_kontur_dicke = 0 
@@ -129,7 +121,7 @@ def draw():
     grid(xscl, yscl, xmax, xmin, ymax, ymin, text_groesse) # Zeichnen des Rasters
     
     # Zeitangabe oben rechts
-    timer(zeit_x, zeit_y, t, text_groesse)
+    timer(xmax, ymin, t, text_groesse)
     
     # Schieberegler für Amplitude
     draw_ruler_A(schiebe_A_x, schiebe_A_y, schiebe_laenge)
