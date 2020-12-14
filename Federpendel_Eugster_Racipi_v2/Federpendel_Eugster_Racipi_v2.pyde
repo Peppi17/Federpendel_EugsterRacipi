@@ -144,12 +144,18 @@ def draw():
     noStroke()
     fill(0)
     rect(-w + abstand_rand_x + 2, -h + 5 + 2, titel_laenge, titel_breite)
-    fill(200)
+    fill(150)
     rect(-w + abstand_rand_x, -h + 5, titel_laenge, titel_breite)
     textAlign(CENTER, TOP)
     textSize(text_groesse*2.5)
     fill(255)
     text("Federpendel", -w + abstand_rand_x + titel_laenge/2, -h + 5)
+    
+    #Beschreibung
+    textAlign(LEFT)
+    textSize(3*text_groesse/4)
+    fill(0)
+    text("Diese Animation simuliert einen Federpendel ohne Daempfung.", -w+abstand_rand_x, h-10)
     
     
     # Schieberegler fuer Amplitude
@@ -190,7 +196,6 @@ def draw():
     textAlign(LEFT)
     textSize(10)
     text("Federkonstante: " + akt_k, schiebe_k_x, schiebe_k_y - 10)
-    text(k, schiebe_k_x+150, schiebe_k_y - 10)
     
     
     # Schieberegler fuer Masse
@@ -223,7 +228,6 @@ def draw():
     textAlign(LEFT)
     textSize(10)
     text("Masse: " + akt_m, schiebe_m_x, schiebe_m_y - 10)
-    text(m, schiebe_m_x+150, schiebe_m_y - 10)
     
     # Erstellen der Variable omega fuer cosinuskurve, abhaengig von Federkonstante und Masse
     omega = sqrt(k/m)
