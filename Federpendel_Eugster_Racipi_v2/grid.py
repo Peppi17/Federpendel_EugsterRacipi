@@ -1,7 +1,7 @@
 # Erstellt das Raster
 
 def grid(xscl, yscl, xmax, xmin, ymax, ymin, text_size):
-    
+        
     # weisser Hintergrund
     background(255) 
 
