@@ -3,7 +3,7 @@
 def button(kontur_dicke, kontur_farbe, button_farbe_r, button_farbe_g, button_farbe_b , button_xpos, button_ypos, button_laenge, button_breite, name, text_size):
     
     noStroke()
-    fill(0)
+    fill(50)
     rect(button_xpos+2, button_ypos+2, button_laenge, button_breite)
 
     strokeWeight(kontur_dicke)
