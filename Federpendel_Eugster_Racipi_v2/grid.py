@@ -32,7 +32,7 @@ def grid(xscl, yscl, xmax, xmin, ymax, ymin, text_size):
     # Beschriftungen der Achsen
     textSize(text_size)
     textAlign(LEFT, TOP)
-    text("Amplitude A", 20,ymin+20) # Text "Amplitude A" zur Y-Achse
+    text("Amplitude A", 20,ymin+15) # Text "Amplitude A" zur Y-Achse
     textAlign(RIGHT, TOP)
     text("Zeit t",xmax-20, 20) # Text "Zeit t" zur X-Achse
     
