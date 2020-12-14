@@ -21,8 +21,8 @@ pointerVal_m = 1.0
 
 
 
-bild_width = 1000
-bild_height = 800
+bild_width = 1800
+bild_height = 1200
 
 text_groesse = bild_height/36 # je nach Bildschirmgrösse -> Schriftgrösse-Anpassung
 
@@ -65,7 +65,7 @@ reset_y = -bild_height/2 + abstand_rand + knopf_breite + abstand_knoepfe
 
 # Skala für das Raster des Graphen
 xscl = 25 # 1 Schritt entspricht 1 Sekunde, wegen frameRate 25
-yscl = 20
+yscl = 10
     
 # X-Werte des Graphen
 xmin = 0 
@@ -167,8 +167,7 @@ def draw():
         cosinuskurve(A, omega, k, m, t, rand, streckung)
         federpendel(A, omega, t, streckung, balken_x, balken_y, balken_laenge, balken_breite)
         t = t + 0.04 # 0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
-        # Zeichnet immer wieder Stand der Federpendel und der Cosinuskurve und erhöht die Zeit um 0.04
-        # 0.04 weil 1 s : 25 Bilder/s = Veränderung von 0.04 pro Bild
+        # Zeichnet immer wieder Stand des Federpendels und der Cosinuskurve und erhöht die Zeit um 0.04
         
         start_kontur_dicke = 6 # Start-Knopf-Kontur wird 2 Pixel dick
         stop_kontur_dicke = 0
