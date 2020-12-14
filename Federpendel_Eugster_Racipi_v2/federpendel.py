@@ -9,7 +9,7 @@ def federpendel(A, omega, t, streckungY, objX, objY, obj_laenge, obj_breite, fac
     line(objX, objY + obj_breite, objX,-A*cos(omega*t)*streckungY) # Linie("Feder") und Balken oben, an dem der Ball angemacht ist
     
     # Ball
-    strokeWeight(5+factor_m*20)
+    strokeWeight(30+factor_m * 3/4)
     stroke(255, 100, 0)
     point(objX, -A*cos(omega*t)*streckungY) # Kreieren der neuen Zeichnung (Ball und Linie)
  
