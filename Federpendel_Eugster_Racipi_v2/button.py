@@ -4,7 +4,7 @@ def button(kontur_dicke, kontur_farbe, button_farbe_r, button_farbe_g, button_fa
     
     noStroke()
     fill(50)
-    rect(button_xpos+2, button_ypos+2, button_laenge, button_breite)
+    rect(button_xpos+4, button_ypos+4, button_laenge, button_breite)
 
     strokeWeight(kontur_dicke)
     stroke(kontur_farbe, kontur_farbe, 0)
