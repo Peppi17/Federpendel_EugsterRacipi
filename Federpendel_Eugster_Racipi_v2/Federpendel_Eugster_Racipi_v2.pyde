@@ -7,8 +7,8 @@ from round import round2
 
 
 # Definieren der Bildschirmgroesse
-bild_width = 1800
-bild_height = 1500
+bild_width = 2400
+bild_height = 1600
 
 # Definieren der Schriftgroesse abhaengig von der Bildschirmhoehe
 text_groesse = bild_height/36 # je nach Bildschirmgroesse -> Schriftgroesse-Anpassung
@@ -52,7 +52,7 @@ kontur_dicke = knopf_laenge/25
 
 # Skala fuer das Raster des Graphen
 xscl = 25 # 1 Schritt entspricht 1 Sekunde, wegen frameRate 25
-yscl = 10
+yscl = 25
     
 # X-Werte des Graphen
 xmin = 0 
@@ -66,8 +66,8 @@ ymax = bild_height/2
  
 ###### Animation des Federpendels (federpendel.py) ####################################
 
-balken_laenge = 60
-balken_breite = 30
+balken_laenge = bild_width/20
+balken_breite = bild_height/20
 balken_x = -bild_width/8 
 balken_y = -bild_height/2 + abstand_rand_y
 
@@ -118,10 +118,10 @@ def draw():
     w = width/2
     h = height/2
     
-    # Raster zeichnen
+# Raster zeichnen
     grid(xscl, yscl, xmax, xmin, ymax, ymin, text_groesse) # Zeichnen des Rasters
     
-    # Zeitangabe oben rechts
+# Zeitangabe oben rechts
     timer(xmax, ymin, t, text_groesse)
     
 # Titel
@@ -141,83 +141,44 @@ def draw():
     textAlign(LEFT)
     textSize(3*text_groesse/4)
     fill(0)
-    text("Diese Animation simuliert ein Federpendel ohne Daempfung.", -w+abstand_rand_x, h-10) #abstand_rand_y?
+    text("Diese Animation simuliert ein Federpendel ohne Daempfung.", -w + abstand_rand_x, h - abstand_rand_y) #abstand_rand_y?
  
     
 # Schieberegler fuer Amplitude
     draw_ruler_A(schiebe_A_x, schiebe_A_y, schiebe_laenge)
     
-    '''if pointerVal_A <= 0:
-        A = 1 + pointerVal_A*0.01
-    else:'''
-    A = ((3/8 * h)/streckungY)*pointerVal_A*0.01 # damit Amplitude moeglichst gross, je nach Bildschirmhoehe, werden kann
+    A = ((3.0/4.0 * h)/streckungY)*pointerVal_A*0.01 # damit Amplitude moeglichst gross, je nach Bildschirmhoehe, werden kann
     
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
     text("Amplitude: " + str(round2(A*10)) + " cm", schiebe_A_x, schiebe_A_y - (text_groesse + 5))
     
-    # Schieberegler fuer Federkonstante
+# Schieberegler fuer Federkonstante
     draw_ruler_k(schiebe_k_x, schiebe_k_y, schiebe_laenge)
-    k = PI + 6*PI * pointerVal_k*0.01
-    
-    # Beschriftung fuer Schieberegler der Federkonstante
-    if pointerVal_k <= 100/5:
-        akt_k = "sehr klein"
-        
-    if 100/5 <= pointerVal_k <= 2*100/5:
-        akt_k = "klein"    
-        
-    if 2*100/5 <= pointerVal_k <= 3*100/5:
-        akt_k = "mittel"
-        
-    elif 3*100/5 <= pointerVal_k <= 4*100/5:
-        akt_k = "gross"
-        
-    else:
-        akt_k = "sehr gross"
-
-
+    k = 5 + 45 * pointerVal_k*0.01
     
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
-    text("Federkonstante: " + akt_k, schiebe_k_x, schiebe_k_y - (text_groesse + 5))
+    text("Federkonstante: " + str(round2(k)) + " N/m", schiebe_k_x, schiebe_k_y - (text_groesse + 5))
     
     
-    # Schieberegler fuer Masse
+# Schieberegler fuer Masse
     draw_ruler_m(schiebe_m_x, schiebe_m_y, schiebe_laenge)    
     
     # Kontrolle fuer Masse
     if pointerVal_m <= 1: # Damit die Masse niemals null wird (niemals -100%), sonst gibt es bei omega eine Division durch Null -> Fehler
-        pointerVal_m = 1
-        m = 1 + pointerVal_m*0.01
+        m = 1 
     else:
-        m = 1 + pointerVal_m*0.01
+        m = 100 * pointerVal_m * 0.0001
     
-    # Beschriftung fuer Schieberegler der Masse
-    if pointerVal_m <= 100/5:
-        akt_m = "sehr leicht"
-        
-    if 100/5 <= pointerVal_m <= 2*100/5:
-        akt_m = "leicht"    
-        
-    if 2*100/5 <= pointerVal_m <= 3*100/5:
-        akt_m = "mittel"
-        
-    elif 3*100/5 <= pointerVal_m <= 4*100/5:
-        akt_m = "schwer"
-        
-    else:
-        akt_m = "sehr schwer"
-        
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
-    text("Masse: " + akt_m, schiebe_m_x, schiebe_m_y - (text_groesse + 5))
+    text("Masse: " + str(round2(m)) + " kg", schiebe_m_x, schiebe_m_y - (text_groesse + 5))
     
-    # Frequenz & Periode
-    '''auf weniger stellen runden und besser positionieren, überlappens sich bei mir'''
+# Frequenz & Periode
     omega = sqrt(k/m) # Erstellen der Variable omega fuer cosinuskurve, abhaengig von Federkonstante und Masse
     textAlign(LEFT)
     textSize(3*text_groesse/4)
@@ -226,6 +187,9 @@ def draw():
     periode = round2(1/frequenz)
     text("Frequenz: " + str(frequenz) + " Hz", abstand_rand_x, h-10)
     text("Periode: " + str(periode) + " s", abstand_rand_x + bild_width/6, h - 10)
+    
+#########################
+    
     # Starten
     if  mouseButton == LEFT and start_x + w <= mouseX <= start_x + knopf_laenge + w and start_y + h <= mouseY <= start_y + knopf_breite + h : 
         prg_lauft = 1
@@ -301,8 +265,6 @@ def draw():
 
 '''angepasst auf Translation'''
 
-
-'''Schieberegler viel zu klein'''
 
 # Funktion: Schieberegler generieren
 # objX:      X-Position des Reglers
@@ -458,5 +420,5 @@ def draw_ruler_m(objX_vorher, objY_vorher, objLength):
     circle(pointerPos_m-width/2, objY_vorher, pointerRadius) # angepasst wegen Translation
     
     # Eingestellter Wert anhand der Schieberposition ermitteln
-    pointerVal_m = int(100 / float(objLength) * (pointerPos_m - objX)) 
+    pointerVal_m = int(10000 / float(objLength) * (pointerPos_m - objX)) # Anpassung Möglichkeit Dezimalzahlen
         
