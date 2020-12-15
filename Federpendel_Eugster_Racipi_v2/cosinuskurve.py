@@ -1,6 +1,6 @@
 # Zeichnet die Punkte auf dem Raster
 
-def cosinuskurve(A, omega, k, m, t, rand, streckung): 
+def cosinuskurve(A, omega, t, rand, streckung): 
     
     # Vorderster Punkt
     strokeWeight(10)
