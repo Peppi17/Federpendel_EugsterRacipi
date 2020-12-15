@@ -3,7 +3,9 @@ from grid import grid
 from timer import timer
 from federpendel import federpendel
 from cosinuskurve import cosinuskurve
+from auslenkung import auslenkung
 from round import round2
+from round import round1
 
 
 # Definieren der Bildschirmgroesse
@@ -123,6 +125,7 @@ def draw():
     
 # Zeitangabe oben rechts
     timer(xmax, ymin, t, text_groesse)
+
     
 # Titel
     textAlign(CENTER)
@@ -152,16 +155,16 @@ def draw():
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
-    text("Amplitude: " + str(round2(A*10)) + " cm", schiebe_A_x, schiebe_A_y - (text_groesse + 5))
+    text("Amplitude: " + str(round1(A*10)) + " cm", schiebe_A_x, schiebe_A_y - (text_groesse + 5))
     
 # Schieberegler fuer Federkonstante
     draw_ruler_k(schiebe_k_x, schiebe_k_y, schiebe_laenge)
-    k = 5 + 45 * pointerVal_k*0.01
+    k = 5 + 20 * pointerVal_k*0.01
     
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
-    text("Federkonstante: " + str(round2(k)) + " N/m", schiebe_k_x, schiebe_k_y - (text_groesse + 5))
+    text("Federkonstante: " + str(round1(k)) + " N/m", schiebe_k_x, schiebe_k_y - (text_groesse + 5))
     
     
 # Schieberegler fuer Masse
@@ -171,12 +174,12 @@ def draw():
     if pointerVal_m <= 1: # Damit die Masse niemals null wird (niemals -100%), sonst gibt es bei omega eine Division durch Null -> Fehler
         m = 1 
     else:
-        m = 100 * pointerVal_m * 0.0001
+        m = 50 * pointerVal_m * 0.01
     
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
-    text("Masse: " + str(round2(m)) + " kg", schiebe_m_x, schiebe_m_y - (text_groesse + 5))
+    text("Masse: " + str(round1(m)) + " kg", schiebe_m_x, schiebe_m_y - (text_groesse + 5))
     
 # Frequenz & Periode
     omega = sqrt(k/m) # Erstellen der Variable omega fuer cosinuskurve, abhaengig von Federkonstante und Masse
@@ -187,6 +190,9 @@ def draw():
     periode = round2(1/frequenz)
     text("Frequenz: " + str(frequenz) + " Hz", abstand_rand_x, h-10)
     text("Periode: " + str(periode) + " s", abstand_rand_x + bild_width/6, h - 10)
+    
+# Auslenkung oben rechts
+    auslenkung(xmax, ymin, t, text_groesse, A, omega)
     
 #########################
     
@@ -204,7 +210,7 @@ def draw():
 
     
     if prg_lauft == 0: # Stopp, wenn Programm nicht laeuft
-        cosinuskurve(A, omega, k, m, t, rand, streckungY)
+        cosinuskurve(A, omega, t, rand, streckungY)
         federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m) # Zeichnet aktuellen Stand der Federpendel und der Cosinuskurve
         
         start_kontur_dicke = 0
@@ -213,7 +219,7 @@ def draw():
         stop_kontur_farbe = 255 # Stop-Knopf-Kontur wird Gelb
         
     if prg_lauft == 1 : # Start, wenn Programm laeuft
-        cosinuskurve(A, omega, k, m, t, rand, streckungY)
+        cosinuskurve(A, omega, t, rand, streckungY)
         federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m)
         t = t + 0.04 # 0.04 weil 1 s : 25 Bilder/s = Veraenderung von 0.04 pro Bild
         # Zeichnet immer wieder Stand des Federpendels und der Cosinuskurve und erhoeht die Zeit um 0.04
@@ -420,5 +426,5 @@ def draw_ruler_m(objX_vorher, objY_vorher, objLength):
     circle(pointerPos_m-width/2, objY_vorher, pointerRadius) # angepasst wegen Translation
     
     # Eingestellter Wert anhand der Schieberposition ermitteln
-    pointerVal_m = int(10000 / float(objLength) * (pointerPos_m - objX)) # Anpassung Möglichkeit Dezimalzahlen
+    pointerVal_m = int(100 / float(objLength) * (pointerPos_m - objX)) # Anpassung Möglichkeit Dezimalzahlen
         
