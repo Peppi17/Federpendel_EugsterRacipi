@@ -2,7 +2,6 @@
 
 def federpendel(A, omega, t, streckungY, objX, objY, obj_laenge, obj_breite, factor_k, factor_m): 
     
-   
     # Linie ("Feder" vereinfacht dargestellt als Linie)
     strokeWeight(2+factor_k/PI)
     stroke(100)
