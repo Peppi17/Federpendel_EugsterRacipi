@@ -17,8 +17,8 @@ from runden import runden
 ''' Diese Variablen können auf eigene Bedürfnisse angepasst werden, z.B. Bildschirmgrösse'''
 
 # Bildschirmgroesse
-bild_width = 1200
-bild_height = 500
+bild_width = 2400
+bild_height = 1600
 
 # Schriftgroesse abhaengig von der Bildschirmhoehe
 text_groesse = bild_height/48 # --> 48 Standard, umso kleiner diese Zahl, umso grösser die Schrift
