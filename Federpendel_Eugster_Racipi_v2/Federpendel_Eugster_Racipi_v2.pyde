@@ -17,13 +17,13 @@ from runden import runden
 ''' Diese Variablen können auf eigene Bedürfnisse angepasst werden, z.B. Bildschirmgrösse'''
 
 # Bildschirmgroesse
-bild_width = 2400
-bild_height = 1200
+bild_width = 1200
+bild_height = 500
 
 # Schriftgroesse abhaengig von der Bildschirmhoehe
 text_groesse = bild_height/48 # --> 48 Standard, umso kleiner diese Zahl, umso grösser die Schrift
 
-##### Weitere Variablen ##########################################################################################################
+##### Weitere Variablen #########################################################################################################
 
 # Abstand vom Rand
 abstand_rand_x = 30
@@ -32,7 +32,7 @@ abstand_rand_y = 20
 # Variablen fuer das Zeichnen der Cosinuskurve
 t = 0 # Zeit
 streckungY = 100 #Streckung y-Achse, weil Cosinus nur zwischen -1 und 1
-rand = bild_width/2-text_groesse*5 # x-Koordinate, wenn die Kurve sich zu Bewegen anfangen soll.
+rand = int(bild_width/2-text_groesse*7) # x-Koordinate, wenn die Kurve sich zu Bewegen anfangen soll.
 
 # Programm Modus
 prg_lauft = 2 # 0 = Programm laeuft nicht 
@@ -193,14 +193,14 @@ def draw():
     # Zeitangabe
     fill(0)
     textAlign(LEFT, TOP)
-    text("Zeit:  ", xmax-12*text_groesse, ymin+15)
+    text("Zeit:  ", xmax-13*text_groesse, ymin+15)
     textAlign(RIGHT, TOP)
     text(str(runden(t, 1)) + " Sekunden", xmax-20, ymin+15)
     
     # Auslenkung
     fill(0)
     textAlign(LEFT, TOP)
-    text("Auslenkung:  ", xmax-12*text_groesse, ymin+15+text_groesse+5)
+    text("Auslenkung:  ", xmax-13*text_groesse, ymin+15+text_groesse+5)
     textAlign(RIGHT, TOP)
     text(str(runden(A*cos(omega*t)*10, 1)) + " cm", xmax-20, ymin+15+text_groesse+5)
     
