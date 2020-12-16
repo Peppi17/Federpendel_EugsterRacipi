@@ -1,41 +1,48 @@
+
+
+# Importieren der verschiedenen Funktionen aus anderen Dateien
 from button import button
-from grid import grid
-from timer import timer
-from federpendel import federpendel
 from cosinuskurve import cosinuskurve
-from auslenkung import auslenkung
+from federpendel import federpendel
+from grid import grid
 from round import round2
 from round import round1
+from timer import timer
 
+##### Verschiedene Variablen für Layout ########################################################################################
 
-# Definieren der Bildschirmgroesse
+''' Diese Variablen können auf eigene Bedürfnisse angepasst werden, z.B. Bildschirmgrösse'''
+
+# Bildschirmgroesse
 bild_width = 2400
-bild_height = 1600
+bild_height = 1200
 
-# Definieren der Schriftgroesse abhaengig von der Bildschirmhoehe
-text_groesse = bild_height/36 # je nach Bildschirmgroesse -> Schriftgroesse-Anpassung
+# Schriftgroesse abhaengig von der Bildschirmhoehe
+text_groesse = bild_height/48 # --> 48 Standard, umso kleiner diese Zahl, umso grösser die Schrift
 
+##### Weitere Variablen ##########################################################################################################
 
-# allgemeine Variablen und Variablen fuer das Zeichnen der Cosinuskurve
+# Abstand vom Rand
+abstand_rand_x = 30
+abstand_rand_y = 20
+
+# Variablen fuer das Zeichnen der Cosinuskurve
 t = 0 # Zeit
-streckungY = 100 #100 = Streckung y-Achse '''wo wird das benutzt???'''
-streckungX = 25
-
+streckungY = 100 #Streckung y-Achse, weil Cosinus nur zwischen -1 und 1
 rand = bild_width/2-text_groesse*5 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen soll.
 
+# Programm Modus
 prg_lauft = 2 # 0 = Programm laeuft nicht 
               # 1 = Programm laeuft 
               # 2 = Programm Anfang und Reset
 
-##### Knoepfe (button.py) #############################################################
+##### Knoepfe (button.py) ######################################################################################################
 
 # Groesse Knoepfe 
 knopf_laenge = bild_width/12
 knopf_breite = bild_height/18
 abstand_knoepfe = bild_width/90
 titel_breite = text_groesse*2.5 + 10
-abstand_rand_x = 30
-abstand_rand_y = 20
 
 # Koordinaten Knoepfe 
 start_x = -bild_width/2 + abstand_rand_x
@@ -48,9 +55,7 @@ reset_y = stop_y + knopf_breite + abstand_knoepfe
 # Konturdicke beim Leuchten
 kontur_dicke = knopf_laenge/25 
 
-#######################################################################################
-
-###### Raster (grid.py) ###############################################################
+###### Raster (grid.py) ###########################################################################################################
 
 # Skala fuer das Raster des Graphen
 xscl = 25 # 1 Schritt entspricht 1 Sekunde, wegen frameRate 25
@@ -63,19 +68,15 @@ xmax = bild_width/2
 # Y-Werte des Graphen
 ymin = -bild_height/2
 ymax = bild_height/2
-
-#######################################################################################
  
-###### Animation des Federpendels (federpendel.py) ####################################
+###### Animation des Federpendels (federpendel.py) ################################################################################
 
 balken_laenge = bild_width/20
 balken_breite = bild_height/20
 balken_x = -bild_width/8 
 balken_y = -bild_height/2 + abstand_rand_y
 
-#######################################################################################
-
-###### Variablen der Schiebergler #####################################################
+###### Variablen der Schiebergler #################################################################################################
 
 abstand_rand_sch_x = abstand_rand_x # x-Abstand vom Rand fuer Schieberegler
 abstand_rand_sch_y = 100 # y-Abstand vom Rand fuer Schieberegler
@@ -105,8 +106,7 @@ movingMode_m = False
 pointerPos_m = 0
 pointerVal_m = 1.0
 
-#######################################################################################
-
+###################################################################################################################################
 
 def setup():
     size(bild_width,bild_height) # Bildschirmgroesse
@@ -120,14 +120,10 @@ def draw():
     w = width/2
     h = height/2
     
-# Raster zeichnen
+    # Raster zeichnen
     grid(xscl, yscl, xmax, xmin, ymax, ymin, text_groesse) # Zeichnen des Rasters
-    
-# Zeitangabe oben rechts
-    timer(xmax, ymin, t, text_groesse)
-
-    
-# Titel
+        
+    # Titel
     textAlign(CENTER)
     textSize(text_groesse*2)
     titel = "Federpendel"
@@ -140,24 +136,24 @@ def draw():
     fill(255)
     text(titel, -w + abstand_rand_x + titel_laenge/2, -h + abstand_rand_y + 3*titel_breite/4)
     
-# Beschreibung
+    # Beschreibung
+    textSize(text_groesse)
     textAlign(LEFT)
-    textSize(3*text_groesse/4)
     fill(0)
-    text("Diese Animation simuliert ein Federpendel ohne Daempfung.", -w + abstand_rand_x, h - abstand_rand_y) #abstand_rand_y?
- 
+    text("Diese Animation simuliert ein Federpendel ohne Daempfung.", -w + abstand_rand_x, h - abstand_rand_y) 
     
-# Schieberegler fuer Amplitude
+##### Schieberegler ######################################################################################################################### 
+    
+    # Schieberegler fuer Amplitude
     draw_ruler_A(schiebe_A_x, schiebe_A_y, schiebe_laenge)
-    
     A = ((3.0/4.0 * h)/streckungY)*pointerVal_A*0.01 # damit Amplitude moeglichst gross, je nach Bildschirmhoehe, werden kann
     
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
     text("Amplitude: " + str(round1(A*10)) + " cm", schiebe_A_x, schiebe_A_y - (text_groesse + 5))
-    
-# Schieberegler fuer Federkonstante
+      
+    # Schieberegler fuer Federkonstante
     draw_ruler_k(schiebe_k_x, schiebe_k_y, schiebe_laenge)
     k = 5 + 20 * pointerVal_k*0.01
     
@@ -166,8 +162,7 @@ def draw():
     textSize(text_groesse)
     text("Federkonstante: " + str(round1(k)) + " N/m", schiebe_k_x, schiebe_k_y - (text_groesse + 5))
     
-    
-# Schieberegler fuer Masse
+    # Schieberegler fuer Masse
     draw_ruler_m(schiebe_m_x, schiebe_m_y, schiebe_laenge)    
     
     # Kontrolle fuer Masse
@@ -180,22 +175,32 @@ def draw():
     textAlign(LEFT)
     textSize(text_groesse)
     text("Masse: " + str(round1(m)) + " kg", schiebe_m_x, schiebe_m_y - (text_groesse + 5))
-    
-# Frequenz & Periode
+ 
+##### Anzeige der Variablen und Funktionswerte der Schwingung #############################################################################
+ 
+    # Frequenz & Periode
     omega = sqrt(k/m) # Erstellen der Variable omega fuer cosinuskurve, abhaengig von Federkonstante und Masse
     textAlign(LEFT)
-    textSize(3*text_groesse/4)
+    textSize(text_groesse)
     fill(0)
     frequenz = round2(omega / TWO_PI)
     periode = round2(1/frequenz)
-    text("Frequenz: " + str(frequenz) + " Hz", abstand_rand_x, h-10)
-    text("Periode: " + str(periode) + " s", abstand_rand_x + bild_width/6, h - 10)
+    text("Frequenz: " + str(frequenz) + " Hz" + "     " + "Periode: " + str(periode) + " s", abstand_rand_x, h - abstand_rand_y)
     
-# Auslenkung oben rechts
-    auslenkung(xmax, ymin, t, text_groesse, A, omega)
+    # Zeitangabe
+    timer(xmax, ymin, t, text_groesse)
     
-#########################
+    # Auslenkung
+    fill(0)
+    textAlign(LEFT, TOP)
+    text("Auslenkung:  ", xmax-12*text_groesse, ymin+15+text_groesse+5)
+    textAlign(RIGHT, TOP)
+    text(str(round1(A*cos(omega * t)*10)) + " cm", xmax-20, ymin+15+text_groesse+5)
     
+##### Knoepfe Modus #####################################################################################################################
+
+# Durch Anklicken der Knöpfe wird der Programm Modus gewechselt
+        
     # Starten
     if  mouseButton == LEFT and start_x + w <= mouseX <= start_x + knopf_laenge + w and start_y + h <= mouseY <= start_y + knopf_breite + h : 
         prg_lauft = 1
@@ -208,32 +213,41 @@ def draw():
     if  mouseButton == LEFT and reset_x + w <= mouseX <= reset_x + knopf_laenge + w and reset_y + h <= mouseY <= reset_y + knopf_breite + h : 
         prg_lauft = 2
 
-    
-    if prg_lauft == 0: # Stopp, wenn Programm nicht laeuft
+###### Programm Modus #####################################################################################################################
+
+    # Stopp, wenn Programm nicht laeuft
+    if prg_lauft == 0: 
+        
         cosinuskurve(A, omega, t, rand, streckungY)
         federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m) # Zeichnet aktuellen Stand der Federpendel und der Cosinuskurve
         
+        # Variablen Knopf
         start_kontur_dicke = 0
-        stop_kontur_dicke = kontur_dicke # Stop-Knopf-Kontur wird dicker
+        stop_kontur_dicke = kontur_dicke
         start_kontur_farbe = 0
-        stop_kontur_farbe = 255 # Stop-Knopf-Kontur wird Gelb
+        stop_kontur_farbe = 255
         
-    if prg_lauft == 1 : # Start, wenn Programm laeuft
+    # Start, wenn Programm laeuft        
+    if prg_lauft == 1: 
+        
         cosinuskurve(A, omega, t, rand, streckungY)
         federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m)
         t = t + 0.04 # 0.04 weil 1 s : 25 Bilder/s = Veraenderung von 0.04 pro Bild
         # Zeichnet immer wieder Stand des Federpendels und der Cosinuskurve und erhoeht die Zeit um 0.04
         
-        start_kontur_dicke = kontur_dicke # Start-Knopf-Kontur wird 2 Pixel dick
+        #Variablen Knopf
+        start_kontur_dicke = kontur_dicke
         stop_kontur_dicke = 0
-        start_kontur_farbe = 255 # Start-Knopf-Kontur wird Gelb
+        start_kontur_farbe = 255
         stop_kontur_farbe = 0
                 
-    if prg_lauft == 2: # Anfang und Reset
+    # Anfang und Reset
+    if prg_lauft == 2: 
         
         federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m)    
-            
-        t = 0 # Zuruecksetzen der relevanten Variablen
+        t = 0 
+        
+        # Variablen Schieberegler
         pointerPos_A = 0
         pointerVal_A = 1.0
         pointerPos_k = 0
@@ -241,16 +255,13 @@ def draw():
         pointerPos_m = 0
         pointerVal_m = 1.0
         
-        
-        
+        # Variablen Knopf
         start_kontur_dicke = 0 
         stop_kontur_dicke = 0
         start_kontur_farbe = 0 
         stop_kontur_farbe = 0
-    
         
-        
-##### Knoepfe ###########################################################################################
+##### Aussehen Knoepfe #####################################################################################################################################
 
     # Start-Button
     button(start_kontur_dicke, start_kontur_farbe, 0, 153, 0, start_x, start_y, knopf_laenge, knopf_breite, "Start", text_groesse)
@@ -261,8 +272,9 @@ def draw():
     # Reset-Button
     button(0, 0, 200, 200, 200, reset_x, reset_y, knopf_laenge, knopf_breite, "Reset", text_groesse)
     
-##################################################################################################
+##### Funktion Schieberegler ##############################################################################################################################
 
+# Optimierungsmöglichkeit: Nur eine Funktion für alle Schieberegler und als eigene Datei
 
 '''
 ' Schieberegler
@@ -271,11 +283,12 @@ def draw():
 
 '''angepasst auf Translation'''
 
-
 # Funktion: Schieberegler generieren
 # objX:      X-Position des Reglers
 # objY:      Y-Position des Reglers
 # objLength: Laenge des Reglers
+
+# Schieberegler für Amplitude A
 def draw_ruler_A(objX_vorher, objY_vorher, objLength):    
     global movingMode_A
     global pointerPos_A
@@ -325,8 +338,8 @@ def draw_ruler_A(objX_vorher, objY_vorher, objLength):
     
     # Eingestellter Wert anhand der Schieberposition ermitteln
     pointerVal_A = int(100 / float(objLength) * (pointerPos_A - objX))
-   
-   
+
+# Schieberegler für Federstärke k
 def draw_ruler_k(objX_vorher, objY_vorher, objLength):    
     global movingMode_k
     global pointerPos_k
@@ -377,7 +390,7 @@ def draw_ruler_k(objX_vorher, objY_vorher, objLength):
     # Eingestellter Wert anhand der Schieberposition ermitteln
     pointerVal_k = int(100 / float(objLength) * (pointerPos_k - objX ))
   
-
+# Schieberegler für Masse m
 def draw_ruler_m(objX_vorher, objY_vorher, objLength):    
     global movingMode_m
     global pointerPos_m
@@ -427,4 +440,3 @@ def draw_ruler_m(objX_vorher, objY_vorher, objLength):
     
     # Eingestellter Wert anhand der Schieberposition ermitteln
     pointerVal_m = int(100 / float(objLength) * (pointerPos_m - objX)) # Anpassung Möglichkeit Dezimalzahlen
-        
