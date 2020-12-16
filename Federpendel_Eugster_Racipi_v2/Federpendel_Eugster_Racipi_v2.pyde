@@ -32,7 +32,7 @@ abstand_rand_y = 20
 # Variablen fuer das Zeichnen der Cosinuskurve
 t = 0 # Zeit
 streckungY = 100 #Streckung y-Achse, weil Cosinus nur zwischen -1 und 1
-rand = bild_width/2-text_groesse*5 # Zeitpunkt, wenn die Kurve sich zu Bewegen anfangen soll.
+rand = bild_width/2-text_groesse*5 # x-Koordinate, wenn die Kurve sich zu Bewegen anfangen soll.
 
 # Programm Modus
 prg_lauft = 2 # 0 = Programm laeuft nicht 
@@ -84,7 +84,7 @@ balken_y = -bild_height/2 + abstand_rand_y
 abstand_rand_sch_x = abstand_rand_x # x-Abstand vom Rand fuer Schieberegler
 abstand_rand_sch_y = 100 # y-Abstand vom Rand fuer Schieberegler
 abstand_schiebe = text_groesse*4 # x-Abstand zwischen Schieberegler
-schiebe_laenge = bild_width/4 # Länge des Schiereglers
+schiebe_laenge = bild_width/4 # Länge des Schiebereglers
 
 # Positionen der Schieberegler
 schiebe_A_x = -bild_width/2 + abstand_rand_sch_x
