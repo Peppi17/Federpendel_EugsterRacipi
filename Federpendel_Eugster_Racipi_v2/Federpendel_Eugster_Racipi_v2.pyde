@@ -1,13 +1,16 @@
-
+'''
+' LNW Projekt Applikation HS2020
+' Pädagogische Hochschule St. Gallen
+' Fatmir Racipi und Stephanie Eugster
+' Federpendel ohne Dämpfung und Phasenverschiebung
+'''
 
 # Importieren der verschiedenen Funktionen aus anderen Dateien
 from button import button
 from cosinuskurve import cosinuskurve
 from federpendel import federpendel
 from grid import grid
-from round import round2
-from round import round1
-from timer import timer
+from runden import runden
 
 ##### Verschiedene Variablen für Layout ########################################################################################
 
@@ -151,7 +154,7 @@ def draw():
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
-    text("Amplitude: " + str(round1(A*10)) + " cm", schiebe_A_x, schiebe_A_y - (text_groesse + 5))
+    text("Amplitude: " + str(runden(A*10, 1)) + " cm", schiebe_A_x, schiebe_A_y - (text_groesse + 5))
       
     # Schieberegler fuer Federkonstante
     draw_ruler_k(schiebe_k_x, schiebe_k_y, schiebe_laenge)
@@ -160,7 +163,7 @@ def draw():
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
-    text("Federkonstante: " + str(round1(k)) + " N/m", schiebe_k_x, schiebe_k_y - (text_groesse + 5))
+    text("Federkonstante: " + str(runden(k, 1)) + " N/m", schiebe_k_x, schiebe_k_y - (text_groesse + 5))
     
     # Schieberegler fuer Masse
     draw_ruler_m(schiebe_m_x, schiebe_m_y, schiebe_laenge)    
@@ -174,7 +177,7 @@ def draw():
     fill(0)
     textAlign(LEFT)
     textSize(text_groesse)
-    text("Masse: " + str(round1(m)) + " kg", schiebe_m_x, schiebe_m_y - (text_groesse + 5))
+    text("Masse: " + str(runden(m, 1)) + " kg", schiebe_m_x, schiebe_m_y - (text_groesse + 5))
  
 ##### Anzeige der Variablen und Funktionswerte der Schwingung #############################################################################
  
@@ -183,26 +186,30 @@ def draw():
     textAlign(LEFT)
     textSize(text_groesse)
     fill(0)
-    frequenz = round2(omega / TWO_PI)
-    periode = round2(1/frequenz)
+    frequenz = runden((omega / TWO_PI), 2)
+    periode = runden((1/frequenz), 2)
     text("Frequenz: " + str(frequenz) + " Hz" + "     " + "Periode: " + str(periode) + " s", abstand_rand_x, h - abstand_rand_y)
     
     # Zeitangabe
-    timer(xmax, ymin, t, text_groesse)
+    fill(0)
+    textAlign(LEFT, TOP)
+    text("Zeit:  ", xmax-12*text_groesse, ymin+15)
+    textAlign(RIGHT, TOP)
+    text(str(runden(t, 1)) + " Sekunden", xmax-20, ymin+15)
     
     # Auslenkung
     fill(0)
     textAlign(LEFT, TOP)
     text("Auslenkung:  ", xmax-12*text_groesse, ymin+15+text_groesse+5)
     textAlign(RIGHT, TOP)
-    text(str(round1(A*cos(omega * t)*10)) + " cm", xmax-20, ymin+15+text_groesse+5)
+    text(str(runden(A*cos(omega*t)*10, 1)) + " cm", xmax-20, ymin+15+text_groesse+5)
     
 ##### Knoepfe Modus #####################################################################################################################
 
 # Durch Anklicken der Knöpfe wird der Programm Modus gewechselt
         
     # Starten
-    if  mouseButton == LEFT and start_x + w <= mouseX <= start_x + knopf_laenge + w and start_y + h <= mouseY <= start_y + knopf_breite + h : 
+    if  mouseButton == LEFT and start_x + w <= mouseX <= start_x + knopf_laenge + w and start_y + h <= mouseY <= start_y + knopf_breite + h: 
         prg_lauft = 1
     
     # Stoppen
@@ -218,9 +225,10 @@ def draw():
     # Stopp, wenn Programm nicht laeuft
     if prg_lauft == 0: 
         
+        # Zeichnet aktuellen Stand der Federpendel und der Cosinuskurve
         cosinuskurve(A, omega, t, rand, streckungY)
-        federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m) # Zeichnet aktuellen Stand der Federpendel und der Cosinuskurve
-        
+        federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m) 
+                
         # Variablen Knopf
         start_kontur_dicke = 0
         stop_kontur_dicke = kontur_dicke
@@ -230,10 +238,10 @@ def draw():
     # Start, wenn Programm laeuft        
     if prg_lauft == 1: 
         
+        # Zeichnet immer wieder Stand des Federpendels und der Cosinuskurve und erhoeht die Zeit um 0.04
         cosinuskurve(A, omega, t, rand, streckungY)
         federpendel(A, omega, t, streckungY, balken_x, balken_y, balken_laenge, balken_breite, k, m)
         t = t + 0.04 # 0.04 weil 1 s : 25 Bilder/s = Veraenderung von 0.04 pro Bild
-        # Zeichnet immer wieder Stand des Federpendels und der Cosinuskurve und erhoeht die Zeit um 0.04
         
         #Variablen Knopf
         start_kontur_dicke = kontur_dicke
